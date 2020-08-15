@@ -1,0 +1,5 @@
+@baseUrl = https://fahemnydz.000webhostapp.com
+
+POST {{baseUrl}}/test2.php
+Accept: application/json
+###

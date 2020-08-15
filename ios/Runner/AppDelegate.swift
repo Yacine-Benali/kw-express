@@ -1,5 +1,7 @@
 import UIKit
 import Flutter
+/*TODO  add firebase config to iod
+*/
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {

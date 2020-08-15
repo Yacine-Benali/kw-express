@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "23490928985",
+    "firebase_url": "https://kwexpressv1.firebaseio.com",
+    "project_id": "kwexpressv1",
+    "storage_bucket": "kwexpressv1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23490928985:android:d62faf8787ae1027ecec48",
+        "android_client_info": {
+          "package_name": "com.kwexpress.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23490928985-n1ps6br9q60rgio7ad2ke2dobra112ca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwexpress.app",
+            "certificate_hash": "212405c713e5caf5833cb368f5f1e98b3c8e3dd0"
+          }
+        },
+        {
+          "client_id": "23490928985-9juat21j298ceqk77s791o4a99i5j16n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwexpress.app",
+            "certificate_hash": "ee5b0d4c7257bfe993bb153b872bbc8629e9cb6d"
+          }
+        },
+        {
+          "client_id": "23490928985-2d9cfsr5eo2lkhmvlh3qn8jr9rn13fmb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwexpress.app",
+            "certificate_hash": "aace56d4d89701e06829266db1e14d18eda67e2f"
+          }
+        },
+        {
+          "client_id": "23490928985-tl2eql7fc4cq408ueleb8ghuicljsimv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWd5bYlgE7zvbvHBKi3tCITJpVhSlqtIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23490928985-tl2eql7fc4cq408ueleb8ghuicljsimv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
