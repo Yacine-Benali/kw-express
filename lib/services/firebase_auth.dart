@@ -27,47 +27,33 @@ class FirebaseAuthService implements Auth {
   }
 
   @override
-  Future<AuthUser> signInWithEmailAndPassword(
-      String email, String password) async {
-    final AuthResult authResult = await _firebaseAuth
-        .signInWithCredential(EmailAuthProvider.getCredential(
-      email: email,
-      password: password,
-    ));
-    return _userFromFirebase(authResult.user);
-  }
-
-  @override
-  Future<AuthUser> createUserWithEmailAndPassword(
-      String email, String password) async {
-    final AuthResult authResult = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password);
-    return _userFromFirebase(authResult.user);
-  }
-
-  @override
-  Future<void> sendPasswordResetEmail(String email) async {
-    await _firebaseAuth.sendPasswordResetEmail(email: email);
-  }
-
-  Future<void> sendSignInWithEmailLink({
-    @required String email,
-    @required String url,
-    @required bool handleCodeInApp,
-    @required String iOSBundleID,
-    @required String androidPackageName,
-    @required bool androidInstallIfNotAvailable,
-    @required String androidMinimumVersion,
-  }) async {
-    return await _firebaseAuth.sendSignInWithEmailLink(
-      email: email,
-      url: url,
-      handleCodeInApp: handleCodeInApp,
-      iOSBundleID: iOSBundleID,
-      androidPackageName: androidPackageName,
-      androidInstallIfNotAvailable: androidInstallIfNotAvailable,
-      androidMinimumVersion: androidMinimumVersion,
+  Future verifyPhoneNumber(
+    String mobile,
+    void Function(AuthException) onVerificationFailed,
+    void Function(String, [int]) onCodeSent,
+  ) async {
+    _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: mobile,
+      timeout: Duration(seconds: 60),
+      verificationCompleted: (AuthCredential authCredential) =>
+          _onVerificationCompleted(authCredential),
+      verificationFailed: onVerificationFailed,
+      codeSent: (String verificationId, [int forceResendingToken]) =>
+          onCodeSent(verificationId, forceResendingToken),
+      codeAutoRetrievalTimeout: null,
     );
+  }
+
+  @override
+  Future<void> signInWithPhoneNumber(
+      String verificationId, String smsCode) async {
+    AuthCredential authCredential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId, smsCode: smsCode);
+    await _firebaseAuth.signInWithCredential(authCredential);
+  }
+
+  _onVerificationCompleted(AuthCredential authCredential) async {
+    await _firebaseAuth.signInWithCredential(authCredential);
   }
 
   @override

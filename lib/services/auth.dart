@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -18,10 +19,18 @@ class AuthUser {
 
 abstract class Auth {
   Future<AuthUser> currentUser();
-  Future<AuthUser> signInWithEmailAndPassword(String email, String password);
+
+  Future<void> verifyPhoneNumber(
+    String phoneNumber,
+    void Function(AuthException) onVerificationFailed,
+    void Function(String, [int]) onCodeSent,
+  );
+  Future<void> signInWithPhoneNumber(
+    String verificationId,
+    String smsCode,
+  );
 
   Future<void> signOut();
-  Future<List<String>> fetchSignInMethodsForEmail({String email});
   Stream<AuthUser> get onAuthStateChanged;
   void dispose();
 }

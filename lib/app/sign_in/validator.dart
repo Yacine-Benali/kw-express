@@ -45,11 +45,11 @@ class ValidatorInputFormatter implements TextInputFormatter {
 }
 
 class EmailEditingRegexValidator extends RegexValidator {
-  EmailEditingRegexValidator() : super(regexSource: '^\\S+@\\S+\\.\\S+\$');
+  EmailEditingRegexValidator() : super(regexSource: '^0\\d{9}\$');
 }
 
 class EmailSubmitRegexValidator extends RegexValidator {
-  EmailSubmitRegexValidator() : super(regexSource: '^\\S+@\\S+\\.\\S+\$');
+  EmailSubmitRegexValidator() : super(regexSource: '^0\\d{9}\$');
 }
 
 class NonEmptyStringValidator extends StringValidator {
@@ -69,37 +69,9 @@ class MinLengthStringValidator extends StringValidator {
   }
 }
 
-class UsernameEditingRegexValidator extends RegexValidator {
-  UsernameEditingRegexValidator()
-      : super(
-            regexSource:
-                '^(?=.{3,20}\$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])\$');
-}
-
-class UsernameSubmitRegexValidator extends RegexValidator {
-  UsernameSubmitRegexValidator()
-      : super(
-            regexSource:
-                '^(?=.{3,20}\$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])\$');
-}
-
-class EmailAndPasswordValidators {
-  final TextInputFormatter emailInputFormatter =
+class PhoneNumberValidators {
+  final TextInputFormatter phoneNumberInputFormatter =
       ValidatorInputFormatter(editingValidator: EmailEditingRegexValidator());
-  final StringValidator emailSubmitValidator = EmailSubmitRegexValidator();
-  final StringValidator passwordRegisterSubmitValidator =
-      MinLengthStringValidator(6);
-  final StringValidator passwordSignInSubmitValidator =
-      NonEmptyStringValidator();
-}
-
-class UsernameAndPasswordValidators {
-  final TextInputFormatter usernameInputFormatter = ValidatorInputFormatter(
-      editingValidator: UsernameEditingRegexValidator());
-  final StringValidator usernameSubmitValidator =
-      UsernameSubmitRegexValidator();
-  final StringValidator passwordRegisterSubmitValidator =
-      MinLengthStringValidator(6);
-  final StringValidator passwordSignInSubmitValidator =
-      NonEmptyStringValidator();
+  final StringValidator phoneNumberSubmitValidator =
+      EmailSubmitRegexValidator();
 }

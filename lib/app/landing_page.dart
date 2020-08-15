@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kwexpress/app/home/home_screen.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:provider/provider.dart';
 
-import 'app/sign_in/phone_number/phone_number_sign_in_page.dart';
+import 'sign_in/phone_number/phone_number_sign_in_page.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -16,9 +17,7 @@ class LandingPage extends StatelessWidget {
             if (user == null) {
               return PhoneNumberSignInPage.create(context);
             }
-            return Container(
-              color: Colors.red,
-            );
+            return HomeScreen();
           } else {
             return Scaffold(
               body: Center(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kwexpress/landing_page.dart';
+import 'package:kwexpress/app/landing_page.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:kwexpress/services/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'kw',
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
+          primarySwatch: Colors.red,
         ),
         home: LandingPage(),
       ),

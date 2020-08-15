@@ -1,5 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:android="http://schemas.android.com/apk/res/android" height="512" width="512" xmlns="http://www.w3.org/2000/svg">
-  <path d="M64,64h384v384h-384z" fill="#ECEFF1"/>
-  <path d="M256,296.384l192,151.616l0,-299.328z" fill="#CFD8DC"/>
-  <path d="M464,64h-16L256,215.616L64,64H48C21.504,64 0,85.504 0,112v288c0,26.496 21.504,48 48,48h16V148.672l192,147.68L448,148.64V448h16c26.496,0 48,-21.504 48,-48V112C512,85.504 490.496,64 464,64z" fill="#F44336"/>
-</svg>
+<svg height="512" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m64 64h384v384h-384z" fill="#eceff1"/><path d="m256 296.384 192 151.616v-299.328z" fill="#cfd8dc"/><path d="m464 64h-16l-192 151.616-192-151.616h-16c-26.496 0-48 21.504-48 48v288c0 26.496 21.504 48 48 48h16v-299.328l192 147.68 192-147.712v299.36h16c26.496 0 48-21.504 48-48v-288c0-26.496-21.504-48-48-48z" fill="#f44336"/></svg>

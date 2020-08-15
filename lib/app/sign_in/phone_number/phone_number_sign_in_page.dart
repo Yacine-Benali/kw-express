@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:kwexpress/app/sign_in/phone_number/phone_number_sign_in_model.dart';
+import 'package:kwexpress/app/sign_in/phone_number/error_icon_widget.dart';
+import 'package:kwexpress/app/sign_in/phone_number/phone_number_sign_in_bloc.dart';
 import 'package:kwexpress/app/sign_in/phone_number/subtitle_widget.dart';
 import 'package:kwexpress/common_widgets/form_submit_button.dart';
 import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
@@ -15,9 +16,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class PhoneNumberSignInPage extends StatefulWidget {
-  const PhoneNumberSignInPage._({Key key, @required this.model})
+  const PhoneNumberSignInPage._({Key key, @required this.bloc})
       : super(key: key);
-  final PhoneNumberSignInModel model;
+
+  final PhoneNumberSignInBloc bloc;
 
   static Future<void> show(
     BuildContext context,
@@ -32,13 +34,8 @@ class PhoneNumberSignInPage extends StatefulWidget {
 
   static Widget create(BuildContext context, {VoidCallback onSignedIn}) {
     final Auth auth = Provider.of<Auth>(context, listen: false);
-    return ChangeNotifierProvider<PhoneNumberSignInModel>(
-      create: (_) => PhoneNumberSignInModel(auth: auth),
-      child: Consumer<PhoneNumberSignInModel>(
-        builder: (_, PhoneNumberSignInModel model, __) =>
-            PhoneNumberSignInPage._(model: model),
-      ),
-    );
+    final PhoneNumberSignInBloc bloc = PhoneNumberSignInBloc(auth: auth);
+    return PhoneNumberSignInPage._(bloc: bloc);
   }
 
   @override
@@ -46,63 +43,63 @@ class PhoneNumberSignInPage extends StatefulWidget {
 }
 
 class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
-  final FocusScopeNode _node = FocusScopeNode();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  PhoneNumberSignInModel get model => widget.model;
-  bool _visible = true;
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _smsController = TextEditingController();
 
+  PhoneNumberSignInBloc get bloc => widget.bloc;
+  bool isSmsSent = false;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ErrorIconWidget _errorWidget = ErrorIconWidget(false);
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    _phoneNumberController.dispose();
+    isSmsSent = false;
     super.dispose();
   }
 
-  void _showSignInError(
-      PhoneNumberSignInModel model, PlatformException exception) {
+  _showSignInError(PlatformException e) {
     PlatformExceptionAlertDialog(
-      title: model.errorAlertTitle,
-      exception: exception,
+      title: 'faild',
+      exception: e,
     ).show(context);
   }
 
-  Future<void> _submit() async {
+  Future<void> _submitPhoneNumber() async {
     try {
-      final bool success = await model.submit();
-      if (success) {
-        if (model.formType == EmailPasswordSignInFormType.forgotPassword) {
-          await PlatformAlertDialog(
-            title: Strings.resetLinkSentTitle,
-            content: Strings.resetLinkSentMessage,
-            defaultActionText: Strings.ok,
-          ).show(context);
-        } else {
-          // if (widget.onSignedIn != null) {
-          //   // widget.onSignedIn();
-          // }
+      if (_formKey.currentState.validate()) {
+        errorWidget = ErrorIconWidget(false);
+        final bool success =
+            await bloc.submitPhoneNumber(_phoneNumberController.text);
+        if (success) {
+          setState(() {
+            isSmsSent = true;
+          });
         }
+      } else {
+        errorWidget = ErrorIconWidget(true);
       }
     } on PlatformException catch (e) {
-      _showSignInError(model, e);
+      _showSignInError(e);
     }
   }
 
-  void _emailEditingComplete() {
-    if (model.canSubmitEmail) {
-      _node.nextFocus();
+  Future<void> _submitSmsCode() async {
+    try {
+      String smsCode = _smsController.text;
+      await bloc.submitSmsCode(smsCode);
+    } on PlatformException catch (e) {
+      _showSignInError(e);
     }
   }
 
-  void _passwordEditingComplete() {
-    if (!model.canSubmitEmail) {
-      _node.previousFocus();
-      return;
-    }
-    _submit();
+  set errorWidget(ErrorIconWidget value) {
+    setState(() {
+      _errorWidget = value;
+    });
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildSubmitPhoneNumberButton() {
     return ButtonTheme(
       minWidth: SizeConfig.safeBlockHorizontal * 48 - 50,
       height: 50,
@@ -111,7 +108,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
           "SUIVANT",
           style: TextStyle(color: Colors.grey[200]),
         ),
-        onPressed: () {},
+        onPressed: () => _submitPhoneNumber(),
         color: Colors.yellow,
         borderSide: BorderSide(
           color: Colors.grey[200],
@@ -124,50 +121,118 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
     );
   }
 
-  Widget _buildPhoneNumberField() {
-    return SizedBox(
-      width: SizeConfig.safeBlockHorizontal * 48 + 50,
-      child: TextField(
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
-        controller: _emailController,
-        decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey,
-              width: 2.5,
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          hintStyle: TextStyle(color: Colors.grey),
-          hintText: 'entrer vos numero',
-          errorText: model.emailErrorText,
-          enabled: !model.isLoading,
+  Widget _buildSubmitSmsButton() {
+    return ButtonTheme(
+      minWidth: SizeConfig.safeBlockHorizontal * 48 - 50,
+      height: 50,
+      child: OutlineButton(
+        child: Text(
+          "VERIFIER",
+          style: TextStyle(color: Colors.grey[200]),
         ),
-        autocorrect: false,
-        keyboardType: TextInputType.phone,
-        keyboardAppearance: Brightness.light,
-        onChanged: model.updateEmail,
-        onEditingComplete: _emailEditingComplete,
-        inputFormatters: <TextInputFormatter>[
-          model.emailInputFormatter,
-        ],
+        onPressed: () => _submitSmsCode(),
+        color: Colors.yellow,
+        borderSide: BorderSide(
+          color: Colors.grey[200],
+          width: 3,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
       ),
     );
   }
 
-  Widget _buildFadingText() {
-    return AnimatedOpacity(
-      // If the widget is visible, animate to 0.0 (invisible).
-      // If the widget is hidden, animate to 1.0 (fully visible).
-      opacity: _visible ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 200),
-      // The green box must be a child of the AnimatedOpacity widget.
-      child: Text('subtitle'),
+  Widget _buildSmsField() {
+    return SizedBox(
+      width: SizeConfig.safeBlockHorizontal * 48 + 50,
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _smsController,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            suffixIcon: _errorWidget,
+            counterText: '',
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 2.5,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 2.5,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            hintStyle: TextStyle(color: Colors.grey),
+            hintText: 'entrer le code reçu',
+          ),
+          maxLength: 6,
+          autocorrect: false,
+          keyboardType: TextInputType.phone,
+          keyboardAppearance: Brightness.light,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPhoneNumberField() {
+    return SizedBox(
+      width: SizeConfig.safeBlockHorizontal * 48 + 50,
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _phoneNumberController,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
+          //controller: _phoneNumberController,
+          decoration: InputDecoration(
+            suffixIcon: _errorWidget,
+            counterText: '',
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 2.5,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 2.5,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            hintStyle: TextStyle(color: Colors.grey),
+            hintText: 'entrer vos numero',
+          ),
+          maxLength: 10,
+          autocorrect: false,
+          validator: (String phoneNumber) =>
+              bloc.validatePhoneNumber(phoneNumber),
+          keyboardType: TextInputType.phone,
+          keyboardAppearance: Brightness.light,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly,
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildContent() {
+    final svg2 = SvgPicture.asset(
+      AssetsPath.logo,
+      semanticsLabel: 'logo',
+    );
     return Align(
       alignment: Alignment.center,
       child: Column(
@@ -178,18 +243,17 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
             width: SizeConfig.safeBlockHorizontal * 48,
             child: Container(
               color: Colors.yellow,
-              child: SvgPicture.asset(
-                AssetsPath.logo,
-                semanticsLabel: 'logo',
-              ),
+              child: svg2,
             ),
           ),
           SizedBox(height: 30),
           SubtitleWidget(),
           SizedBox(height: 30),
-          _buildPhoneNumberField(),
+          if (!isSmsSent) ...[_buildPhoneNumberField()],
+          if (isSmsSent) ...[_buildSmsField()],
           SizedBox(height: 30),
-          _buildSubmitButton(),
+          if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
+          if (isSmsSent) ...[_buildSubmitSmsButton()],
           SizedBox(height: 50),
         ],
       ),
@@ -207,10 +271,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
           children: [
             FittedBox(
               fit: BoxFit.fill,
-              child: SvgPicture.asset(
-                AssetsPath.signInBackground,
-                semanticsLabel: 'background',
-              ),
+              child: Image.asset(AssetsPath.signInBackground2),
             ),
             _buildContent(),
           ],
