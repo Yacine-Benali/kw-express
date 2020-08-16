@@ -23,11 +23,12 @@ environment:
 dependencies:
   #backend
   http: ^0.12.2
-  #state mangement
+  #state mangement & bloc
   provider: ^4.3.2
-
   #ui
   flutter_svg: ^0.18.0
+  cached_network_image: ^2.2.0+1
+
   #firebase
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
