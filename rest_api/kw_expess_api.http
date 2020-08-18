@@ -3,3 +3,6 @@
 POST {{baseUrl}}/test2.php
 Accept: application/json
 ###
+
+POST {{baseUrl}}/test3.php?Resto=3
+###

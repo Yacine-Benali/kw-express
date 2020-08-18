@@ -23,11 +23,15 @@ environment:
 dependencies:
   #backend
   http: ^0.12.2
+  basic_utils: ^2.6.2
+
   #state mangement & bloc
   provider: ^4.3.2
+  tuple: ^1.0.3
   #ui
   flutter_svg: ^0.18.0
   cached_network_image: ^2.2.0+1
+  carousel_slider: ^2.2.1
 
   #firebase
   firebase_core: ^0.4.0+9

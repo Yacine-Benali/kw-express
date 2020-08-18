@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
+import 'package:kwexpress/constants/assets_path.dart';
 
 class RestaurantTileWidget extends StatefulWidget {
   const RestaurantTileWidget({
@@ -23,74 +26,171 @@ class RestaurantTileWidget extends StatefulWidget {
 class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
   Restaurant get restaurant => widget.restaurant;
   @override
+  initState() {
+    super.initState();
+  }
+
+  Widget _buildProfileImage() {
+    return SizedBox(
+      height: 80,
+      width: 80,
+      child: Container(
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(),
+        child: CachedNetworkImage(
+          imageUrl: widget.restaurant.imageProfile,
+          placeholder: (context, url) => SizedBox(
+            height: 80,
+            width: 80,
+            child: widget.imageProfile,
+          ),
+          errorWidget: (_, __, ___) => SizedBox(
+            height: 80,
+            width: 80,
+            child: widget.imageProfile,
+          ),
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 5.0,
+              ),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeButton() {
+    return SizedBox(
+      width: 90,
+      child: RaisedButton(
+        padding: EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: null,
+        disabledColor: Colors.white,
+        disabledElevation: 3,
+        color: Colors.white,
+        child: Text(
+          restaurant.time,
+          style: TextStyle(fontSize: 12, color: Colors.black87),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       child: Card(
         elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+        child: InkWell(
+          onTap: () => print(widget.restaurant.name),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 190,
+                child: Stack(
                   children: [
                     SizedBox(
-                      height: 80,
-                      width: 80,
-                      child: widget.imageProfile,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                      child: SizedBox(
-                        height: 150,
-                        width: 150,
+                      height: 150,
+                      child: SizedBox.expand(
                         child: CachedNetworkImage(
-                          placeholder: (context, url) => widget.imageCover,
-                          imageUrl: restaurant.imageCover,
+                          imageUrl: widget.restaurant.imageCover,
+                          placeholder: (context, url) => SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: widget.imageCover,
+                          ),
+                          errorWidget: (_, __, ___) => SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: widget.imageCover,
+                          ),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 100,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        onPressed: () {},
-                        color: Colors.white,
-                        child: Text(
-                          restaurant.time,
-                          style: TextStyle(fontSize: 12),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: _buildProfileImage(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: _buildTimeButton(),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            restaurant.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            restaurant.address,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Container(
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () {},
+                          child: Icon(
+                            CustomIcons.heart,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                ListTile(
-                  title: Text(
-                    restaurant.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  subtitle: Text(restaurant.address),
-                  trailing: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {},
-                    child: Icon(
-                      CustomIcons.heart,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

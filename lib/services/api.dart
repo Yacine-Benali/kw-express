@@ -1,7 +1,7 @@
 enum Endpoint {
   restaurants,
-  casesSuspected,
-  casesConfirmed,
+  restaurantDetail,
+  menu,
   deaths,
   recovered,
 }
@@ -18,8 +18,8 @@ class API {
 
   static Map<Endpoint, String> _paths = {
     Endpoint.restaurants: 'test2.php',
-    Endpoint.casesSuspected: 'casesSuspected',
-    Endpoint.casesConfirmed: 'casesConfirmed',
+    Endpoint.restaurantDetail: 'test3.php',
+    Endpoint.menu: 'test.php',
     Endpoint.deaths: 'deaths',
     Endpoint.recovered: 'recovered',
   };

@@ -6,6 +6,19 @@ class RestaurantsBloc {
   RestaurantsBloc({this.apiService});
   final APIService apiService;
 
-  Future<List<Restaurant>> fetchRestaurants() async =>
-      await apiService.fetchRestaurants(endpoint: Endpoint.restaurants);
+  Future<List<Restaurant>> fetchRestaurants() async {
+    //await apiService.fetchMenu();
+    //await apiService.fetchRestaurantDetail();
+    return await apiService.fetchRestaurants();
+  }
+
+  List<String> getScrollingCoversUrls(List<Restaurant> list) {
+    List<String> coverImageUrlsList = List();
+
+    for (Restaurant restaurant in list) {
+      if (restaurant.imageCover != null)
+        coverImageUrlsList.add(restaurant.imageCover);
+    }
+    return coverImageUrlsList;
+  }
 }
