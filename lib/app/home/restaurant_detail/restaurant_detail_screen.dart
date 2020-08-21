@@ -1,19 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:kwexpress/app/home/restaurant_detail/food_tile_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/order_screen.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
-import 'package:kwexpress/app/home/restaurant_detail/restaurant_dialog.dart';
+import 'package:kwexpress/app/home/restaurant_detail/restaurant_speed_dial.dart';
 import 'package:kwexpress/app/home/restaurants/swiper_widget.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
-import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
-import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,6 +45,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     menuFuture = bloc.fetchMenu();
     cartFoodList = List();
     showCart = false;
+
     super.initState();
   }
 
@@ -72,7 +67,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     if (!showCart) setState(() => showCart = !showCart);
     final snackBar = SnackBar(
       content: Text('${food.name} choisi'),
-      duration: Duration(seconds: 1),
+      duration: Duration(milliseconds: 500),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
 
@@ -205,59 +200,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                     ],
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: SpeedDial(
-                          // both default to 16
-                          animationSpeed: 50,
-                          marginRight: 16,
-                          marginBottom: 16,
-
-                          animatedIconTheme: IconThemeData(size: 22.0),
-                          // this is ignored if animatedIcon is non null
-                          child: Icon(
-                            CustomIcons.order,
-                            color: Colors.white,
-                          ),
-                          visible: true,
-                          closeManually: true,
-                          curve: Curves.easeIn,
-                          overlayColor: Colors.black,
-                          overlayOpacity: 0.5,
-                          heroTag: 'speed-dial-hero-tag',
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          elevation: 8.0,
-                          shape: CircleBorder(),
-                          children: [
-                            SpeedDialChild(
-                              child: Icon(CustomIcons.commande),
-                              backgroundColor: Colors.red,
-                              label: 'Commander',
-                              labelStyle: TextStyle(fontSize: 18.0),
-                              onTap: () => RestaurantDialog(
-                                dialogType: DialogType.commander,
-                              ).show(context),
-                            ),
-                            SpeedDialChild(
-                              child: Icon(CustomIcons.reservation),
-                              backgroundColor: Colors.red,
-                              label: 'Reserver',
-                              labelStyle: TextStyle(fontSize: 18.0),
-                              onTap: () => RestaurantDialog(
-                                dialogType: DialogType.reserver,
-                              ).show(context),
-                            ),
-                            SpeedDialChild(
-                              child: Icon(CustomIcons.map),
-                              backgroundColor: Colors.red,
-                              label: 'Trouver',
-                              labelStyle: TextStyle(fontSize: 18.0),
-                              onTap: () => launchMaps(),
-                            ),
-                          ],
-                        ),
+                      child: RestaurantSpeedDial(
+                        restaurant: widget.restaurant,
                       ),
                     ),
                   ],

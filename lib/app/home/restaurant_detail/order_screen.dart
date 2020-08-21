@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/constants/constants.dart';
@@ -126,7 +127,21 @@ class _OrderScreenState extends State<OrderScreen> {
             borderRadius: BorderRadius.circular(25.0),
             side: BorderSide(color: Colors.red),
           ),
-          onPressed: () {},
+          onPressed: () async {
+            String message =
+                widget.bloc.createMessage(sortedOrder, fullOrderPrice);
+            List<String> recipents = [
+              Constants.phoneNumer1,
+              Constants.phoneNumber2
+            ];
+            print(message);
+            String _result =
+                await sendSMS(message: message, recipients: recipents)
+                    .catchError((onError) {
+              print(onError);
+            });
+            print(_result);
+          },
           color: Colors.red,
           textColor: Colors.white,
           child: Text(

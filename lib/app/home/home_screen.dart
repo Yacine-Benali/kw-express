@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
+import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:kwexpress/services/location_service.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,8 +15,27 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   List<Widget> _pagesList;
 
+  Future<void> getCurrentLocation() async {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    LocationService locationService = LocationService();
+
+    try {
+      Position position = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      locationService.position = position;
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: 'error getting location',
+        exception: e,
+      ).show(context);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
+    getCurrentLocation();
     _pagesList = [
       RestaurantsScreen(),
       Container(color: Colors.white),

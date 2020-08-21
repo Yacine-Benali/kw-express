@@ -5,6 +5,7 @@ import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:kwexpress/services/location_service.dart';
 import 'package:tuple/tuple.dart';
 
 class RestaurantDetailBloc {
@@ -65,5 +66,33 @@ class RestaurantDetailBloc {
     int foodPrice = 0;
     for (Food food in cartFoodList) foodPrice += int.parse(food.price);
     return foodPrice;
+  }
+
+  String createMessage(List<Tuple2<Food, int>> sortedOrder, int fullPrice) {
+    LocationService locationService = LocationService();
+    String restaurant = 'Restaurant:' + this.restaurant.name;
+    String userLocation = locationService.getGoogleMapsUrl();
+    String delivery = 'Livraison: \n' + userLocation ?? 'not available';
+    String sfullPrice = 'Somme: ' + fullPrice.toString() + ' DA';
+
+    String foodDescription = '';
+    for (Tuple2<Food, int> tuple in sortedOrder) {
+      Food food = tuple.item1;
+      int repetition = tuple.item2;
+      String temp =
+          repetition.toString() + ' * ${food.header.name} - ${food.name}';
+      foodDescription = foodDescription + temp + '\n';
+    }
+
+    String orderMessage = restaurant +
+        '\n' +
+        delivery +
+        '\n' +
+        sfullPrice +
+        '\n' +
+        foodDescription +
+        '\n';
+
+    return orderMessage;
   }
 }
