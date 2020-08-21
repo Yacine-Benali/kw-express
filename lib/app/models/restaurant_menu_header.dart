@@ -1,19 +1,19 @@
 import 'package:flutter/foundation.dart';
 
-class RestaurantMenuHeaders {
-  RestaurantMenuHeaders({
+class RestaurantMenuHeader {
+  RestaurantMenuHeader({
     @required this.name,
     @required this.id,
   });
   String name;
   String id;
-  factory RestaurantMenuHeaders.fromMap(Map<String, dynamic> data) {
+  factory RestaurantMenuHeader.fromMap(Map<String, dynamic> data) {
     if (data == null) {
       return null;
     }
     String name = data['nom_speciality'];
     String id = data['id_speciality'];
-    return RestaurantMenuHeaders(
+    return RestaurantMenuHeader(
       name: name,
       id: id,
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:kwexpress/app/models/food.dart';
-import 'package:kwexpress/app/models/restaurant_menu_headers.dart';
+import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 
 class MenuPage {
   MenuPage({
@@ -8,6 +8,6 @@ class MenuPage {
     @required this.foods,
   });
 
-  final RestaurantMenuHeaders header;
+  final RestaurantMenuHeader header;
   final List<Food> foods;
 }

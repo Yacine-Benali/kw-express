@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
-import 'package:kwexpress/app/models/restaurant_menu_headers.dart';
+import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:basic_utils/basic_utils.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +43,7 @@ class APIService {
     throw response;
   }
 
-  Future<Tuple2<List<RestaurantMenuHeaders>, List<String>>>
+  Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {
     var url = api.endpointUri(Endpoint.restaurantDetail).toString();
     final params = {'Resto': restoId};
@@ -65,10 +65,9 @@ class APIService {
       List<String> imageUrls = list.map((i) => i['img'].toString()).toList();
 
       if (dataList.isNotEmpty && imageUrls.isNotEmpty) {
-        final List<RestaurantMenuHeaders> list = dataList
-            .map((data) => RestaurantMenuHeaders.fromMap(data))
-            .toList();
-        final result = Tuple2<List<RestaurantMenuHeaders>, List<String>>(
+        final List<RestaurantMenuHeader> list =
+            dataList.map((data) => RestaurantMenuHeader.fromMap(data)).toList();
+        final result = Tuple2<List<RestaurantMenuHeader>, List<String>>(
           list,
           imageUrls,
         );
