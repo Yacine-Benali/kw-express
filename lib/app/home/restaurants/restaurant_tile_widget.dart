@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/assets_path.dart';
@@ -95,7 +96,14 @@ class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
       child: Card(
         elevation: 2,
         child: InkWell(
-          onTap: () => print(widget.restaurant.name),
+          onTap: () => Navigator.of(context, rootNavigator: false).push(
+            MaterialPageRoute(
+              builder: (context) => RestaurantDetailScreen(
+                restaurant: restaurant,
+              ),
+              fullscreenDialog: true,
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -178,6 +186,7 @@ class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
                       padding: const EdgeInsets.only(right: 20),
                       child: Container(
                         child: FloatingActionButton(
+                          heroTag: widget.restaurant.id,
                           backgroundColor: Colors.white,
                           onPressed: () {},
                           child: Icon(

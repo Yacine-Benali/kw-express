@@ -28,10 +28,15 @@ dependencies:
   #state mangement & bloc
   provider: ^4.3.2
   tuple: ^1.0.3
+  async_resource: ^0.1.4
+
   #ui
   flutter_svg: ^0.18.0
-  cached_network_image: ^2.2.0+1
+  cached_network_image: 2.0.0
   carousel_slider: ^2.2.1
+  path_provider: ^1.6.11
+  dio_http_cache: ^0.2.8  
+  dio: ^3.0.10
 
   #firebase
   firebase_core: ^0.4.0+9

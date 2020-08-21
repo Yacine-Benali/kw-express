@@ -72,53 +72,6 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
     );
   }
 
-  Widget _buildCarousel(List<String> urlsList) {
-    return CarouselSlider(
-      options: CarouselOptions(
-          height: 400.0,
-          autoPlay: true,
-          autoPlayInterval: Duration(seconds: 3),
-          autoPlayAnimationDuration: Duration(milliseconds: 800),
-          // autoPlayCurve: Curves.,
-          onPageChanged: (index, reason) {
-            setState(() {
-              _current = index;
-            });
-          }),
-      items: urlsList.map((i) {
-        return CachedNetworkImage(
-          imageUrl: i,
-          placeholder: (context, url) => Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.black, Colors.white],
-              stops: [0.0, 0.4],
-            )),
-          ),
-          errorWidget: (_, __, ___) => Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.black, Colors.white],
-              stops: [0.0, 0.4],
-            )),
-          ),
-          imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
   Widget _buildList(List<Restaurant> items) {
     final SvgPicture imageProfile = SvgPicture.asset(AssetsPath.imageProfile);
     final SvgPicture imageCover = SvgPicture.asset(AssetsPath.imageCover);

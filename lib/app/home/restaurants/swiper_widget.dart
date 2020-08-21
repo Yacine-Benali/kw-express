@@ -21,7 +21,7 @@ class _SwiperWidgetState extends State<SwiperWidget> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            height: 200,
+            height: 150,
             enlargeCenterPage: true,
             viewportFraction: 1,
             autoPlayCurve: Curves.ease,
@@ -71,6 +71,7 @@ class _SwiperWidgetState extends State<SwiperWidget> {
             return Container(
               width: 4.0,
               height: 4.0,
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _current == index
