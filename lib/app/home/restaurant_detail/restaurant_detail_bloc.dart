@@ -95,4 +95,12 @@ class RestaurantDetailBloc {
 
     return orderMessage;
   }
+
+  Future<void> updateVue() async {
+    try {
+      await apiService.updateVue(restaurant.id);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

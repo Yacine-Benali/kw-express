@@ -45,6 +45,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     bloc = RestaurantDetailBloc(apiService: api, restaurant: widget.restaurant);
     menuFuture = bloc.fetchMenu();
     cartFoodList = List();
+    bloc.updateVue();
     showCart = false;
 
     super.initState();

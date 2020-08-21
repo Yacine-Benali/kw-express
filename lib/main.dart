@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kwexpress/app/landing_page.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/auth.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'kw',
           theme: ThemeData(
-            primarySwatch: AppColors.colorPrimary,
+            primarySwatch: Colors.red,
           ),
           home: LandingPage(),
         ),

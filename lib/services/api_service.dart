@@ -102,4 +102,15 @@ class APIService {
 
     throw response;
   }
+
+  Future<void> updateVue(
+    String restoId,
+  ) async {
+    String url = api.endpointUri(Endpoint.updateVue).toString();
+    final params = {'id_resto': restoId};
+
+    FormData formData = FormData.fromMap(params);
+
+    await _dio.post(url, data: formData);
+  }
 }
