@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwexpress/app/models/food.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 
 class FoodTileWidget extends StatefulWidget {
   final Food food;
@@ -39,7 +40,7 @@ class _FoodTileWidgetState extends State<FoodTileWidget> {
                   child: Text(
                     widget.food.price + ' DA',
                     style: TextStyle(
-                      color: Colors.red,
+                      color: AppColors.colorPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

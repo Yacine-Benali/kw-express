@@ -4,6 +4,7 @@ import 'package:kwexpress/app/models/restaurant.dart';
 import 'dart:math' as math;
 
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -76,8 +77,9 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
-                    onPressed: () {},
-                    color: Colors.white,
+                    onPressed: null,
+                    disabledColor: Colors.white,
+                    disabledElevation: 2,
                     child: Text(
                       "Trouver",
                       style: Theme.of(context).textTheme.bodyText2,
@@ -86,7 +88,7 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                 ),
                 FloatingActionButton(
                   heroTag: null,
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.colorPrimary,
                   mini: true,
                   child: Icon(CustomIcons.map, color: Colors.white),
                   onPressed: () => launchMaps(),
@@ -118,8 +120,9 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
-                    onPressed: () {},
-                    color: Colors.white,
+                    onPressed: null,
+                    disabledColor: Colors.white,
+                    disabledElevation: 2,
                     child: Text(
                       "Reserver",
                       style: Theme.of(context).textTheme.bodyText2,
@@ -128,7 +131,7 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                 ),
                 FloatingActionButton(
                   heroTag: null,
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.colorPrimary,
                   mini: true,
                   child: Icon(CustomIcons.reservation, color: Colors.white),
                   onPressed: () => RestaurantDialog(
@@ -162,8 +165,9 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
-                    onPressed: () {},
-                    color: Colors.white,
+                    onPressed: null,
+                    disabledColor: Colors.white,
+                    disabledElevation: 2,
                     child: Text(
                       "Commander",
                       style: Theme.of(context).textTheme.bodyText2,
@@ -172,7 +176,7 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                 ),
                 FloatingActionButton(
                   heroTag: null,
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.colorPrimary,
                   mini: true,
                   child: Icon(CustomIcons.commande, color: Colors.white),
                   onPressed: () => RestaurantDialog(

@@ -8,6 +8,7 @@ import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -193,7 +194,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                               'VOIR PANIER',
                               style: TextStyle(fontSize: 11),
                             ),
-                            backgroundColor: Colors.red,
+                            backgroundColor: AppColors.colorPrimary,
                           ),
                         ),
                       ),
@@ -226,7 +227,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                           isScrollable: true,
                           controller: _tabController,
                           unselectedLabelColor: Colors.black,
-                          labelColor: Colors.red,
+                          labelColor: AppColors.colorPrimary,
                           labelStyle: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                           indicatorSize: TabBarIndicatorSize.tab,

@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/services/local_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -210,7 +211,7 @@ class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
                                 ? CustomIcons.selected_heart
                                 : CustomIcons.heart,
                             color: widget.restaurant.isFavorit
-                                ? Colors.red
+                                ? AppColors.colorPrimary
                                 : Colors.black,
                           ),
                         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:tuple/tuple.dart';
 
@@ -125,7 +126,7 @@ class _OrderScreenState extends State<OrderScreen> {
         child: RaisedButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
-            side: BorderSide(color: Colors.red),
+            side: BorderSide(color: AppColors.colorPrimary),
           ),
           onPressed: () async {
             String message =
@@ -142,7 +143,7 @@ class _OrderScreenState extends State<OrderScreen> {
             });
             print(_result);
           },
-          color: Colors.red,
+          color: AppColors.colorPrimary,
           textColor: Colors.white,
           child: Text(
             "Commander".toUpperCase(),
@@ -168,7 +169,8 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             subtitle: Text(
               food.price + ' DA',
-              style: TextStyle(fontWeight: FontWeight.w900, color: Colors.red),
+              style: TextStyle(
+                  fontWeight: FontWeight.w900, color: AppColors.colorPrimary),
             ),
             trailing: SizedBox(
               width: 100,
@@ -176,9 +178,9 @@ class _OrderScreenState extends State<OrderScreen> {
               child: RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0),
-                    side: BorderSide(color: Colors.red)),
+                    side: BorderSide(color: AppColors.colorPrimary)),
                 onPressed: () => removeFood(food),
-                color: Colors.red,
+                color: AppColors.colorPrimary,
                 textColor: Colors.white,
                 child: AutoSizeText(
                   "supprimer".toUpperCase(),

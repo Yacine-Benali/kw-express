@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/common_widgets/platform_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
@@ -72,10 +74,13 @@ class RestaurantDialog extends PlatformWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
+              onTap: () async => await launch('tel://${Constants.phoneNumer1}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumer1),
             ),
             ListTile(
+              onTap: () async =>
+                  await launch('tel://${Constants.phoneNumber2}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumber2),
             )

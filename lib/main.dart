@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.red, //or set color with: Color(0xFF0000FF)
+      statusBarColor:
+          AppColors.colorPrimary, //or set color with: Color(0xFF0000FF)
     ));
     API api = API();
     return Provider<Auth>(
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'kw',
           theme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: AppColors.colorPrimary,
           ),
           home: LandingPage(),
         ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_screen.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/services/location_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   List<Widget> _pagesList;
 
   Future<void> getCurrentLocation() async {
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getCurrentLocation();
     _pagesList = [
       RestaurantsScreen(),
-      Container(color: Colors.white),
+      FavoriteRestaurantsScreen(),
       Container(color: Colors.yellow),
       Container(color: Colors.green),
     ];
@@ -61,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     CustomIcons.restaurant,
                     size: 28,
-                    color: _currentIndex == 0 ? Colors.red : Colors.grey,
+                    color: _currentIndex == 0
+                        ? AppColors.colorPrimary
+                        : Colors.grey,
                   ),
                   onPressed: () => setState(() {
                     _currentIndex = 0;
@@ -74,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     CustomIcons.favoris,
                     size: 28,
-                    color: _currentIndex == 1 ? Colors.red : Colors.grey,
+                    color: _currentIndex == 1
+                        ? AppColors.colorPrimary
+                        : Colors.grey,
                   ),
                   onPressed: () => setState(() {
                     _currentIndex = 1;
@@ -87,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     CustomIcons.offre,
                     size: 28,
-                    color: _currentIndex == 2 ? Colors.red : Colors.grey,
+                    color: _currentIndex == 2
+                        ? AppColors.colorPrimary
+                        : Colors.grey,
                   ),
                   onPressed: () => setState(() {
                     _currentIndex = 2;
@@ -100,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     CustomIcons.client,
                     size: 28,
-                    color: _currentIndex == 3 ? Colors.red : Colors.grey,
+                    color: _currentIndex == 3
+                        ? AppColors.colorPrimary
+                        : Colors.grey,
                   ),
                   onPressed: () => setState(() {
                     _currentIndex = 3;

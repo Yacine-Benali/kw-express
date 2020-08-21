@@ -85,11 +85,11 @@ class RestaurantDetailBloc {
     }
 
     String orderMessage = restaurant +
-        '\n' +
+        '\n\n' +
         delivery +
-        '\n' +
+        '\n\n' +
         sfullPrice +
-        '\n' +
+        '\n\n' +
         foodDescription +
         '\n';
 

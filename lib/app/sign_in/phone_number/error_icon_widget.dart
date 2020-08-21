@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwexpress/constants/app_colors.dart';
 
 class ErrorIconWidget extends StatelessWidget {
   bool _isError;
@@ -14,7 +15,7 @@ class ErrorIconWidget extends StatelessWidget {
     isError
         ? out = new Icon(
             Icons.error,
-            color: Color(Colors.red.value),
+            color: Color(AppColors.colorPrimary.value),
           )
         : out = new Icon(null);
 
