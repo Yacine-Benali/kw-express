@@ -17,6 +17,7 @@ class Restaurant {
     @required this.phoneNumber,
     @required this.visible,
     @required this.seen,
+    @required this.isFavorit,
   });
   String id;
   String name;
@@ -33,6 +34,8 @@ class Restaurant {
   String phoneNumber;
   String visible;
   String seen;
+  // local property
+  bool isFavorit;
 
   factory Restaurant.fromMap(Map<String, dynamic> data) {
     if (data == null) {
@@ -70,6 +73,8 @@ class Restaurant {
       phoneNumber: phoneNumber,
       visible: visible,
       seen: seen,
+      // default
+      isFavorit: false,
     );
   }
 

@@ -7,6 +7,8 @@ import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_screen.da
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/assets_path.dart';
+import 'package:kwexpress/services/local_storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RestaurantTileWidget extends StatefulWidget {
   const RestaurantTileWidget({
@@ -14,11 +16,13 @@ class RestaurantTileWidget extends StatefulWidget {
     @required this.restaurant,
     @required this.imageCover,
     @required this.imageProfile,
+    @required this.localStorageService,
   }) : super(key: key);
 
   final Restaurant restaurant;
   final SvgPicture imageProfile;
   final SvgPicture imageCover;
+  final LocalStorageService localStorageService;
 
   @override
   _RestaurantTileWidgetState createState() => _RestaurantTileWidgetState();
@@ -188,10 +192,26 @@ class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
                         child: FloatingActionButton(
                           heroTag: widget.restaurant.id,
                           backgroundColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (widget.restaurant.isFavorit) {
+                              widget.restaurant.isFavorit = false;
+                              widget.localStorageService
+                                  .removeFromFavorite(widget.restaurant.id);
+                            } else {
+                              widget.restaurant.isFavorit = true;
+                              widget.localStorageService
+                                  .addToFavorite(widget.restaurant.id);
+                            }
+
+                            setState(() {});
+                          },
                           child: Icon(
-                            CustomIcons.heart,
-                            color: Colors.black,
+                            widget.restaurant.isFavorit
+                                ? CustomIcons.selected_heart
+                                : CustomIcons.heart,
+                            color: widget.restaurant.isFavorit
+                                ? Colors.red
+                                : Colors.black,
                           ),
                         ),
                       ),

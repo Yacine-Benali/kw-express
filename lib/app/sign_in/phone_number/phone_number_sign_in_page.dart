@@ -1,18 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kwexpress/app/sign_in/phone_number/error_icon_widget.dart';
 import 'package:kwexpress/app/sign_in/phone_number/phone_number_sign_in_bloc.dart';
 import 'package:kwexpress/app/sign_in/phone_number/subtitle_widget.dart';
-import 'package:kwexpress/common_widgets/form_submit_button.dart';
-import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/size_config.dart';
-import 'package:kwexpress/constants/strings.dart';
 import 'package:kwexpress/services/auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class PhoneNumberSignInPage extends StatefulWidget {

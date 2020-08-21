@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
+import 'package:kwexpress/app/home/restaurant_detail/restaurant_dialog.dart';
 import 'package:kwexpress/app/home/restaurants/swiper_widget.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
+import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
+import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+/* TODO
+  opening maps on ios 
+  https://stackoverflow.com/questions/47046637/open-google-maps-app-if-available-with-flutter
+*/
 class RestaurantDetailScreen extends StatefulWidget {
   const RestaurantDetailScreen({
     Key key,
@@ -33,6 +42,20 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     bloc = RestaurantDetailBloc(apiService: api, restaurant: widget.restaurant);
     menuFuture = bloc.fetchMenu();
     super.initState();
+  }
+
+  void launchMaps() async {
+    String googleUrl = widget.restaurant.location;
+    String appleUrl = widget.restaurant.location;
+    if (await canLaunch("comgooglemaps://")) {
+      print('launching com googleUrl');
+      await launch(googleUrl);
+    } else if (await canLaunch(appleUrl)) {
+      print('launching apple url');
+      await launch(appleUrl);
+    } else {
+      throw 'Could not launch url';
+    }
   }
 
   List<Widget> getTabBar(List<MenuPage> list) {
@@ -107,9 +130,61 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
               vsync: this,
               length: menuPages.length,
             );
-            return Material(
-              color: Colors.white,
-              child: Column(
+            return Scaffold(
+              backgroundColor: Colors.white,
+              floatingActionButton: SpeedDial(
+                // both default to 16
+                animationSpeed: 50,
+                marginRight: 18,
+                marginBottom: 20,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                // this is ignored if animatedIcon is non null
+                child: Icon(
+                  CustomIcons.order,
+                  color: Colors.white,
+                ),
+                visible: true,
+                closeManually: true,
+                curve: Curves.easeIn,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+                onOpen: () => print('OPENING DIAL'),
+                onClose: () => print('DIAL CLOSED'),
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(CustomIcons.commande),
+                    backgroundColor: Colors.red,
+                    label: 'Commander',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () => RestaurantDialog(
+                      dialogType: DialogType.commander,
+                    ).show(context),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(CustomIcons.reservation),
+                    backgroundColor: Colors.red,
+                    label: 'Reserver',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () => RestaurantDialog(
+                      dialogType: DialogType.reserver,
+                    ).show(context),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(CustomIcons.map),
+                    backgroundColor: Colors.red,
+                    label: 'Trouver',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () => launchMaps(),
+                  ),
+                ],
+              ),
+              body: Column(
                 children: <Widget>[
                   SwiperWidget(urls: bloc.getUrls()),
                   Center(

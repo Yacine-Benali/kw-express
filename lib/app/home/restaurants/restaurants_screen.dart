@@ -11,7 +11,9 @@ import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/auth.dart';
+import 'package:kwexpress/services/local_storage_service.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RestaurantsScreen extends StatefulWidget {
   @override
@@ -21,12 +23,14 @@ class RestaurantsScreen extends StatefulWidget {
 class _RestaurantsScreenState extends State<RestaurantsScreen> {
   RestaurantsBloc bloc;
   Future<List<Restaurant>> restaurantsListFuture;
+  Future<SharedPreferences> sharedPrefrencesFuture;
   int _current;
 
   @override
   void initState() {
     APIService api = Provider.of<APIService>(context, listen: false);
     bloc = RestaurantsBloc(apiService: api);
+    sharedPrefrencesFuture = SharedPreferences.getInstance();
     restaurantsListFuture = bloc.fetchRestaurants();
     _current = 0;
     super.initState();
@@ -34,12 +38,12 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Restaurant>>(
-      future: restaurantsListFuture,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<Restaurant>> snapshot) {
+    return FutureBuilder<List<dynamic>>(
+      future: Future.wait([restaurantsListFuture, sharedPrefrencesFuture]),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.hasData) {
-          final List<Restaurant> items = snapshot.data;
+          final List<Restaurant> items = snapshot.data[0];
+          final SharedPreferences pref = snapshot.data[1];
           final List<String> urlsList = bloc.getScrollingCoversUrls(items);
           if (items.isNotEmpty) {
             return Column(
@@ -51,7 +55,7 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
                 ),
                 Expanded(
                   flex: 5,
-                  child: _buildList(items),
+                  child: _buildList(items, pref),
                 ),
               ],
             );
@@ -72,7 +76,8 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
     );
   }
 
-  Widget _buildList(List<Restaurant> items) {
+  Widget _buildList(List<Restaurant> items, SharedPreferences pref) {
+    LocalStorageService localStorageService = LocalStorageService(perfs: pref);
     final SvgPicture imageProfile = SvgPicture.asset(AssetsPath.imageProfile);
     final SvgPicture imageCover = SvgPicture.asset(AssetsPath.imageCover);
     return ListView.builder(
@@ -83,6 +88,7 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
           restaurant: items[index],
           imageCover: imageCover,
           imageProfile: imageProfile,
+          localStorageService: localStorageService,
         );
       },
     );

@@ -4,4 +4,5 @@ class AssetsPath {
   static const String logo = 'assets/drawable/logo.svg';
   static const String imageCover = 'assets/drawable/resto_building.svg';
   static const String imageProfile = 'assets/drawable/resto_profile.svg';
+  static const String phone = 'assets/drawable/phone.svg';
 }

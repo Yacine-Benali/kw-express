@@ -1,4 +1,5 @@
 class Constants {
-  // TODO: Replace this with your firebase project URL
-  static const String firebaseProjectURL = 'https://fir-auth-demo-flutter.firebaseapp.com/';
+  static const String phoneNumer1 = '0770590822';
+  static const String phoneNumber2 = '0557678274';
+  static const int deliveryPrice = 400;
 }

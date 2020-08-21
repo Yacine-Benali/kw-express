@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kwexpress/app/sign_in/validator.dart';
-import 'package:kwexpress/constants/strings.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:flutter/foundation.dart';
 
