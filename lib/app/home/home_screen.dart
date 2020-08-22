@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:kwexpress/app/home/client_space/client_space_screen.dart';
 import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_screen.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
+import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/location_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 1;
+  int _currentIndex = 3;
   List<Widget> _pagesList;
 
   Future<void> getCurrentLocation() async {
@@ -42,13 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
       RestaurantsScreen(),
       FavoriteRestaurantsScreen(),
       Container(color: Colors.yellow),
-      Container(color: Colors.green),
+      ClientSpaceScreen(),
     ];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
+
     return SafeArea(
       child: Scaffold(
         body: _pagesList[_currentIndex],

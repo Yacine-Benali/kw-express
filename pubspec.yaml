@@ -37,7 +37,7 @@ dependencies:
   #TODO add geo location permission for ios
   #https://www.digitalocean.com/community/tutorials/flutter-geolocator-plugin
   flutter_sms: 2.0.0+2
-
+  share: ^0.6.4+3
   #ui
   flutter_svg: ^0.18.0
   cached_network_image: 2.0.0
@@ -45,7 +45,7 @@ dependencies:
   flutter_speed_dial: ^1.2.5
   url_launcher: ^5.5.0
   auto_size_text: ^2.1.0
-
+  google_fonts: ^1.1.0
   #firebase
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2

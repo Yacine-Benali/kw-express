@@ -113,4 +113,21 @@ class APIService {
 
     await _dio.post(url, data: formData);
   }
+
+  Future<void> sendMessage(
+    String nomFeed,
+    String numeroClient,
+    String description,
+  ) async {
+    String url = api.endpointUri(Endpoint.sendMessage).toString();
+    final params = {
+      'nom_feed': nomFeed,
+      'numero_client': numeroClient,
+      'description': description,
+    };
+
+    FormData formData = FormData.fromMap(params);
+
+    await _dio.post(url, data: formData);
+  }
 }

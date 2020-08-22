@@ -6,15 +6,11 @@ import 'package:meta/meta.dart';
 class AuthUser {
   const AuthUser({
     @required this.uid,
-    this.email,
-    this.photoUrl,
-    this.displayName,
+    @required this.phoneNumber,
   });
 
   final String uid;
-  final String email;
-  final String photoUrl;
-  final String displayName;
+  final String phoneNumber;
 }
 
 abstract class Auth {

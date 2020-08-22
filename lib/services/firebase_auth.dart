@@ -15,9 +15,7 @@ class FirebaseAuthService implements Auth {
     }
     return AuthUser(
       uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoUrl: user.photoUrl,
+      phoneNumber: user.phoneNumber,
     );
   }
 

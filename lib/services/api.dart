@@ -3,7 +3,7 @@ enum Endpoint {
   restaurantDetail,
   menu,
   updateVue,
-  recovered,
+  sendMessage,
 }
 
 class API {
@@ -21,9 +21,8 @@ class API {
     Endpoint.restaurantDetail: 'test3.php',
     Endpoint.menu: 'test.php',
     Endpoint.updateVue: 'updateVue.php',
-    Endpoint.recovered: 'recovered',
+    Endpoint.sendMessage: 'test4.php',
   };
-  //update vue
 
   //test4
 }
