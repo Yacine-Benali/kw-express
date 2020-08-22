@@ -1,14 +1,11 @@
 import 'dart:collection';
-import 'dart:convert';
-import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api.dart';
-import 'package:basic_utils/basic_utils.dart';
-import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
 
 class APIService {
@@ -58,7 +55,6 @@ class APIService {
 
     if (response.statusCode == 200) {
       final LinkedHashMap<String, dynamic> decodedReponse = response.data;
-      print(response.data);
       final List<dynamic> dataList = decodedReponse['data'];
       Iterable list = decodedReponse['urls'];
 

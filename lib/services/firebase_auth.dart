@@ -5,11 +5,7 @@ import 'package:kwexpress/services/auth.dart';
 class FirebaseAuthService implements Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
-  Future<List<String>> fetchSignInMethodsForEmail({String email}) =>
-      _firebaseAuth.fetchSignInMethodsForEmail(email: email);
-
-  AuthUser _userFromFirebase(FirebaseUser user) {
+  AuthUser _userFromFirebase(User user) {
     if (user == null) {
       return null;
     }
@@ -21,13 +17,13 @@ class FirebaseAuthService implements Auth {
 
   @override
   Stream<AuthUser> get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   @override
   Future verifyPhoneNumber(
     String mobile,
-    void Function(AuthException) onVerificationFailed,
+    void Function(FirebaseAuthException) onVerificationFailed,
     void Function(String, [int]) onCodeSent,
   ) async {
     _firebaseAuth.verifyPhoneNumber(
@@ -38,14 +34,14 @@ class FirebaseAuthService implements Auth {
       verificationFailed: onVerificationFailed,
       codeSent: (String verificationId, [int forceResendingToken]) =>
           onCodeSent(verificationId, forceResendingToken),
-      codeAutoRetrievalTimeout: null,
+      codeAutoRetrievalTimeout: (t) {},
     );
   }
 
   @override
   Future<void> signInWithPhoneNumber(
       String verificationId, String smsCode) async {
-    AuthCredential authCredential = PhoneAuthProvider.getCredential(
+    AuthCredential authCredential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
     await _firebaseAuth.signInWithCredential(authCredential);
   }
@@ -56,7 +52,7 @@ class FirebaseAuthService implements Auth {
 
   @override
   Future<AuthUser> currentUser() async {
-    final FirebaseUser user = await _firebaseAuth.currentUser();
+    final User user = _firebaseAuth.currentUser;
     return _userFromFirebase(user);
   }
 

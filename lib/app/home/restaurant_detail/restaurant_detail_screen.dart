@@ -248,15 +248,31 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
               ),
             );
           } else {
-            return EmptyContent(
-              title: 'title',
-              message: 'message',
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                centerTitle: true,
+                title: Text('Mes Restaurants Favoris',
+                    style: TextStyle(color: Colors.grey)),
+              ),
+              body: EmptyContent(
+                title: 'there are no restaurants',
+                message: 'there are no restaurants',
+              ),
             );
           }
         } else if (snapshot.hasError) {
-          return EmptyContent(
-            title: 'Something went wrong',
-            message: 'Can\'t load items right now',
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text('Mes Restaurants Favoris',
+                  style: TextStyle(color: Colors.grey)),
+            ),
+            body: EmptyContent(
+              title: 'quelque chose s\'est mal passé',
+              message: 'S\'il vous plait, vérifiez votre connexion internet',
+            ),
           );
         }
         return Material(

@@ -9,6 +9,7 @@ import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
+import 'package:kwexpress/services/firebase_messaging_service.dart';
 import 'package:kwexpress/services/location_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
   List<Widget> _pagesList;
 
   Future<void> getCurrentLocation() async {
@@ -40,6 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    FirebaseMessagingService firebaseMessagingService =
+        FirebaseMessagingService();
+
+    firebaseMessagingService.configFirebaseNotification();
+
     getCurrentLocation();
     _pagesList = [
       RestaurantsScreen(),

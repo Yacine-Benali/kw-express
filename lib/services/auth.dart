@@ -18,7 +18,7 @@ abstract class Auth {
 
   Future<void> verifyPhoneNumber(
     String phoneNumber,
-    void Function(AuthException) onVerificationFailed,
+    void Function(FirebaseAuthException) onVerificationFailed,
     void Function(String, [int]) onCodeSent,
   );
   Future<void> signInWithPhoneNumber(

@@ -13,7 +13,7 @@ class LocationService {
 
   String getGoogleMapsUrl() {
     if (position == null)
-      return null;
+      return 'position unavailable';
     else
       return "https://www.google.com/maps/search/?api=1&query=${position.longitude},${position.latitude}";
   }

@@ -49,8 +49,8 @@ class _OfferScreenState extends State<OfferScreen> {
             }
           } else if (snapshot.hasError) {
             return EmptyContent(
-              title: 'Something went wrong',
-              message: 'Can\'t load items right now',
+              title: 'quelque chose s\'est mal passé',
+              message: 'S\'il vous plait, vérifiez votre connexion internet',
             );
           }
           return Center(child: CircularProgressIndicator());

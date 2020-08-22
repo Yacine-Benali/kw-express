@@ -45,14 +45,37 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
 
   PhoneNumberSignInBloc get bloc => widget.bloc;
   bool isSmsSent = false;
+  Stream<bool> smsSentStream;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ErrorIconWidget _errorWidget = ErrorIconWidget(false);
   @override
   void dispose() {
     _phoneNumberController.dispose();
+    bloc.dispose();
     isSmsSent = false;
     super.dispose();
+  }
+
+  void setupStream() {
+    smsSentStream.listen((event) {
+      print('$event received');
+      setState(() => isSmsSent = event);
+    });
+  }
+
+  @override
+  void initState() {
+    print('seting up the stream');
+    smsSentStream = bloc.smsSentStream;
+    setupStream();
+    // Timer timer;
+    // timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) {
+    //   bloc.isSmsSentController.sink.add(true);
+    //   print('sinking...');
+    // });
+
+    super.initState();
   }
 
   _showSignInError(PlatformException e) {
@@ -63,21 +86,21 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   }
 
   Future<void> _submitPhoneNumber() async {
+    smsSentStream.isEmpty.then((value) => print(value));
     try {
       if (_formKey.currentState.validate()) {
         errorWidget = ErrorIconWidget(false);
-        final bool success =
-            await bloc.submitPhoneNumber(_phoneNumberController.text);
-        if (success) {
-          setState(() {
-            isSmsSent = true;
-          });
-        }
+
+        await bloc.submitPhoneNumber(_phoneNumberController.text);
+        // Future.delayed(Duration(seconds: 3))
+        //     .then((value) => setState(() => isSmsSent = true));
       } else {
         errorWidget = ErrorIconWidget(true);
       }
     } on PlatformException catch (e) {
       _showSignInError(e);
+    } catch (e) {
+      print(e);
     }
   }
 

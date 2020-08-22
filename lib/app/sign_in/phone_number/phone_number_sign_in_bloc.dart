@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kwexpress/app/sign_in/validator.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 
 enum SignInFormType { input, confirmation }
 
@@ -11,8 +12,10 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
   });
   final Auth auth;
   String _verificationId;
+  BehaviorSubject<bool> isSmsSentController = BehaviorSubject<bool>();
+  Stream<bool> get smsSentStream => isSmsSentController.stream;
 
-  Future<bool> submitPhoneNumber(String phoneNumber) async {
+  Future<void> submitPhoneNumber(String phoneNumber) async {
     try {
       phoneNumber = '+213' + phoneNumber.substring(1);
       await auth.verifyPhoneNumber(
@@ -20,16 +23,21 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
         _onVerificationFailed,
         _onCodeSent,
       );
-      return true;
     } catch (e) {
       rethrow;
     }
   }
 
-  void _onVerificationFailed(AuthException e) => throw e;
+  void _onVerificationFailed(FirebaseAuthException e) => throw e;
 
-  void _onCodeSent(String verificationId, [int forceResendingToken]) =>
-      this._verificationId = verificationId;
+  void _onCodeSent(String verificationId, [int forceResendingToken]) {
+    this._verificationId = verificationId;
+    print('oncodesent called');
+    if (!isSmsSentController.isClosed) {
+      print('sinking...');
+      isSmsSentController.sink.add(true);
+    }
+  }
 
   Future<void> submitSmsCode(String smsCode) async {
     try {
@@ -44,5 +52,10 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
       return 'please enter valid phone number';
     }
     return null;
+  }
+
+  void dispose() {
+    // print('bloc stream diposed called');
+    isSmsSentController.close();
   }
 }
