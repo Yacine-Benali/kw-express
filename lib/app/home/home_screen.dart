@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:kwexpress/app/home/client_space/client_space_screen.dart';
 import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_screen.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
+import 'package:kwexpress/app/home/offers/offer_screen.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
@@ -16,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 3;
+  int _currentIndex = 2;
   List<Widget> _pagesList;
 
   Future<void> getCurrentLocation() async {
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _pagesList = [
       RestaurantsScreen(),
       FavoriteRestaurantsScreen(),
-      Container(color: Colors.yellow),
+      OfferScreen(),
       ClientSpaceScreen(),
     ];
     super.initState();

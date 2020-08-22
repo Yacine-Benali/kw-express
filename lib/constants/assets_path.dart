@@ -11,4 +11,5 @@ class AssetsPath {
   static const String messenger = 'assets/drawable/messenger.svg';
   static const String viber = 'assets/drawable/viber.svg';
   static const String gmail = 'assets/drawable/gmail.svg';
+  static const String restoOffre = 'assets/drawable/resto_offre.svg';
 }

@@ -38,6 +38,8 @@ dependencies:
   #https://www.digitalocean.com/community/tutorials/flutter-geolocator-plugin
   flutter_sms: 2.0.0+2
   share: ^0.6.4+3
+  launch_review: ^2.0.0
+  #TODO change plist  https://pub.dev/packages/launch_review
   #ui
   flutter_svg: ^0.18.0
   cached_network_image: 2.0.0

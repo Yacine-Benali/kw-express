@@ -9,6 +9,7 @@ import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -83,6 +84,12 @@ class _ClientSpaceScreenState extends State<ClientSpaceScreen> {
                     'Questions Frequentes',
                     style: TextStyle(color: AppColors.textBig, fontSize: 13),
                   ),
+                  onTap: () => Navigator.of(context, rootNavigator: false).push(
+                    MaterialPageRoute(
+                      builder: (context) => ClientServiceScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  ),
                 ),
                 ListTile(
                   leading: Icon(
@@ -93,6 +100,7 @@ class _ClientSpaceScreenState extends State<ClientSpaceScreen> {
                     'Noter l\'application',
                     style: TextStyle(color: AppColors.textBig, fontSize: 13),
                   ),
+                  onTap: () => LaunchReview.launch(),
                 ),
               ],
             ),
