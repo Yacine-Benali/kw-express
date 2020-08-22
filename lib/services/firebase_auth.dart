@@ -23,10 +23,10 @@ class FirebaseAuthService implements Auth {
   @override
   Future verifyPhoneNumber(
     String mobile,
-    void Function(FirebaseAuthException) onVerificationFailed,
-    void Function(String, [int]) onCodeSent,
+    Function(FirebaseAuthException) onVerificationFailed,
+    Function(String, [int]) onCodeSent,
   ) async {
-    _firebaseAuth.verifyPhoneNumber(
+    await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: mobile,
       timeout: Duration(seconds: 60),
       verificationCompleted: (AuthCredential authCredential) =>

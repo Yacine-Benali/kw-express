@@ -13,4 +13,8 @@ class OfferBloc {
     }
     return offers;
   }
+
+  Future<List<String>> fetchSpecialOffer() async {
+    return await apiService.fetchSpecialoffer();
+  }
 }

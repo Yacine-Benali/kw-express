@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kwexpress/app/sign_in/validator.dart';
 import 'package:kwexpress/services/auth.dart';
@@ -12,16 +14,18 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
   });
   final Auth auth;
   String _verificationId;
-  BehaviorSubject<bool> isSmsSentController = BehaviorSubject<bool>();
-  Stream<bool> get smsSentStream => isSmsSentController.stream;
+  StreamController<bool> controller;
 
-  Future<void> submitPhoneNumber(String phoneNumber) async {
+  Future<void> submitPhoneNumber(
+      String phoneNumber, StreamController<bool> controller2) async {
+    // if (this.controller == null) print('no controller has been set');
+    this.controller = controller2;
     try {
       phoneNumber = '+213' + phoneNumber.substring(1);
       await auth.verifyPhoneNumber(
         phoneNumber,
         _onVerificationFailed,
-        _onCodeSent,
+        onCodeSent,
       );
     } catch (e) {
       rethrow;
@@ -30,13 +34,10 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
 
   void _onVerificationFailed(FirebaseAuthException e) => throw e;
 
-  void _onCodeSent(String verificationId, [int forceResendingToken]) {
+  void onCodeSent(String verificationId, [int forceResendingToken]) async {
     this._verificationId = verificationId;
-    print('oncodesent called');
-    if (!isSmsSentController.isClosed) {
-      print('sinking...');
-      isSmsSentController.sink.add(true);
-    }
+    print('oncodeSent');
+    controller.add(true);
   }
 
   Future<void> submitSmsCode(String smsCode) async {
@@ -56,6 +57,5 @@ class PhoneNumberSignInBloc with PhoneNumberValidators {
 
   void dispose() {
     // print('bloc stream diposed called');
-    isSmsSentController.close();
   }
 }

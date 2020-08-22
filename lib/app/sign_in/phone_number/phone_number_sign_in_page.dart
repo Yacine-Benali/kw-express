@@ -6,11 +6,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kwexpress/app/sign_in/phone_number/error_icon_widget.dart';
 import 'package:kwexpress/app/sign_in/phone_number/phone_number_sign_in_bloc.dart';
 import 'package:kwexpress/app/sign_in/phone_number/subtitle_widget.dart';
+import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PhoneNumberSignInPage extends StatefulWidget {
   const PhoneNumberSignInPage._({Key key, @required this.bloc})
@@ -45,35 +47,27 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
 
   PhoneNumberSignInBloc get bloc => widget.bloc;
   bool isSmsSent = false;
+  StreamController<bool> controller;
+
   Stream<bool> smsSentStream;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ErrorIconWidget _errorWidget = ErrorIconWidget(false);
+  SvgPicture svg2;
   @override
   void dispose() {
     _phoneNumberController.dispose();
-    bloc.dispose();
-    isSmsSent = false;
+    controller.close();
     super.dispose();
-  }
-
-  void setupStream() {
-    smsSentStream.listen((event) {
-      print('$event received');
-      setState(() => isSmsSent = event);
-    });
   }
 
   @override
   void initState() {
-    print('seting up the stream');
-    smsSentStream = bloc.smsSentStream;
-    setupStream();
-    // Timer timer;
-    // timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) {
-    //   bloc.isSmsSentController.sink.add(true);
-    //   print('sinking...');
-    // });
+    controller = StreamController<bool>();
+    svg2 = SvgPicture.asset(
+      AssetsPath.logo,
+      semanticsLabel: 'logo',
+    );
 
     super.initState();
   }
@@ -86,12 +80,17 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   }
 
   Future<void> _submitPhoneNumber() async {
-    smsSentStream.isEmpty.then((value) => print(value));
     try {
       if (_formKey.currentState.validate()) {
         errorWidget = ErrorIconWidget(false);
 
-        await bloc.submitPhoneNumber(_phoneNumberController.text);
+        //print('value outside ${bloc.getsmsSentStream.value}');
+
+        await bloc.submitPhoneNumber(
+          _phoneNumberController.text,
+          controller,
+        );
+
         // Future.delayed(Duration(seconds: 3))
         //     .then((value) => setState(() => isSmsSent = true));
       } else {
@@ -100,7 +99,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
     } on PlatformException catch (e) {
       _showSignInError(e);
     } catch (e) {
-      print(e);
+      _showSignInError(e);
     }
   }
 
@@ -110,6 +109,12 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
       await bloc.submitSmsCode(smsCode);
     } on PlatformException catch (e) {
       _showSignInError(e);
+    } catch (e) {
+      PlatformAlertDialog(
+        title: 'failed',
+        content: 'wrong code',
+        defaultActionText: 'OK',
+      ).show(context);
     }
   }
 
@@ -249,54 +254,55 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   }
 
   Widget _buildContent() {
-    final svg2 = SvgPicture.asset(
-      AssetsPath.logo,
-      semanticsLabel: 'logo',
-    );
-    return Align(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: SizeConfig.safeBlockVertical * 19,
-            width: SizeConfig.safeBlockHorizontal * 48,
-            child: Container(
-              color: Colors.yellow,
-              child: svg2,
-            ),
-          ),
-          SizedBox(height: 30),
-          SubtitleWidget(),
-          SizedBox(height: 30),
-          if (!isSmsSent) ...[_buildPhoneNumberField()],
-          if (isSmsSent) ...[_buildSmsField()],
-          SizedBox(height: 30),
-          if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
-          if (isSmsSent) ...[_buildSubmitSmsButton()],
-          SizedBox(height: 50),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: SizeConfig.safeBlockVertical * 19,
+          width: SizeConfig.safeBlockHorizontal * 48,
+          child: Image.asset(AssetsPath.logo2),
+        ),
+        SizedBox(height: 30),
+        SubtitleWidget(),
+        SizedBox(height: 30),
+        if (!isSmsSent) ...[_buildPhoneNumberField()],
+        if (isSmsSent) ...[_buildSmsField()],
+        SizedBox(height: 30),
+        if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
+        if (isSmsSent) ...[_buildSubmitSmsButton()],
+        SizedBox(height: 50),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: Image.asset(AssetsPath.signInBackground2),
+
+    return StreamBuilder<bool>(
+        stream: controller.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) isSmsSent = snapshot.data;
+
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            body: SafeArea(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  FittedBox(
+                    fit: BoxFit.fill,
+                    child: Image.asset(AssetsPath.signInBackground2),
+                  ),
+                  Center(
+                    child: SingleChildScrollView(
+                      child: _buildContent(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            _buildContent(),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }

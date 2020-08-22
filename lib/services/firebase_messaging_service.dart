@@ -75,8 +75,8 @@ class FirebaseMessagingService {
     });
 
     _firebaseMessaging.getToken().then((String newToken) {
-      print('************user token*************');
-      print(newToken);
+      // print('************user token*************');
+      // print(newToken);
     });
   }
 

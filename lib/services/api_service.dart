@@ -40,6 +40,33 @@ class APIService {
     throw response;
   }
 
+  Future<List<String>> fetchSpecialoffer() async {
+    final uri = api.endpointUri(Endpoint.restaurants);
+
+    _dio.interceptors.add(_dioCacheManager.interceptor);
+
+    final response = await _dio.post(
+      uri.toString(),
+      options: _cacheOptions,
+    );
+
+    if (response.statusCode == 200) {
+      final LinkedHashMap<String, dynamic> decodedReponse = response.data;
+      final List<dynamic> dataList = decodedReponse['offre'];
+      print(dataList);
+      if (dataList.isNotEmpty) {
+        final List<String> list = List();
+
+        for (dynamic data in dataList) {
+          list.add(data['imgUrl'].toString());
+        }
+        if (list != null) return list;
+      }
+    }
+
+    throw response;
+  }
+
   Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {
     var url = api.endpointUri(Endpoint.restaurantDetail).toString();
@@ -99,9 +126,7 @@ class APIService {
     throw response;
   }
 
-  Future<void> updateVue(
-    String restoId,
-  ) async {
+  Future<void> updateVue(String restoId) async {
     String url = api.endpointUri(Endpoint.updateVue).toString();
     final params = {'id_resto': restoId};
 

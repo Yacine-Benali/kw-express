@@ -12,4 +12,7 @@ class AssetsPath {
   static const String viber = 'assets/drawable/viber.svg';
   static const String gmail = 'assets/drawable/gmail.svg';
   static const String restoOffre = 'assets/drawable/resto_offre.svg';
+  static const String offre = 'assets/drawable/resto_offre_image.svg';
+
+  static const String logo2 = 'assets/drawable_png/white_logo2.png';
 }
