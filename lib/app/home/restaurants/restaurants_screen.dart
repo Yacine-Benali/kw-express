@@ -53,17 +53,7 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
                 ),
               ],
             );
-          } else {
-            return EmptyContent(
-              title: 'title',
-              message: 'message',
-            );
           }
-        } else if (snapshot.hasError) {
-          return EmptyContent(
-            title: 'quelque chose s\'est mal passé',
-            message: 'S\'il vous plait, vérifiez votre connexion internet',
-          );
         }
         return Center(child: CircularProgressIndicator());
       },

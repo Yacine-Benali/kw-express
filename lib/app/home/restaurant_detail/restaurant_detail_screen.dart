@@ -10,8 +10,10 @@ import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/constants/app_colors.dart';
+import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /* TODO
@@ -248,43 +250,108 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                 ),
               ),
             );
-          } else {
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                centerTitle: true,
-                title: Text('Mes Restaurants Favoris',
-                    style: TextStyle(color: Colors.grey)),
-              ),
-              body: EmptyContent(
-                title: 'there are no restaurants',
-                message: 'there are no restaurants',
-              ),
-            );
           }
-        } else if (snapshot.hasError) {
+        } else {
+          double width = SizeConfig.screenWidth / 3 - 8;
+          _tabController = TabController(
+            initialIndex: 0,
+            vsync: this,
+            length: 4,
+          );
+          List<String> emptyUrls = [''];
           return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              title: AutoSizeText(
-                widget.restaurant.name,
-                maxLines: 1,
-                style: TextStyle(color: Colors.grey),
+            backgroundColor: Colors.white,
+            body: IgnorePointer(
+              child: Column(
+                children: <Widget>[
+                  SwiperWidget(urls: emptyUrls),
+                  Center(
+                    child: Text(
+                      widget.restaurant.service,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[200],
+                      highlightColor: Colors.red[100],
+                      child: TabBar(
+                        labelPadding: EdgeInsets.only(left: 4, right: 4),
+                        isScrollable: true,
+                        controller: _tabController,
+                        unselectedLabelColor: Colors.black,
+                        labelColor: AppColors.colorPrimary,
+                        labelStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        tabs: [
+                          Tab(
+                            child: Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border:
+                                      Border.all(color: Colors.blue, width: 1)),
+                            ),
+                          ),
+                          Tab(
+                            child: Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border:
+                                      Border.all(color: Colors.blue, width: 1)),
+                            ),
+                          ),
+                          Tab(
+                            child: Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border:
+                                      Border.all(color: Colors.blue, width: 1)),
+                            ),
+                          ),
+                          Tab(
+                            child: Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border:
+                                      Border.all(color: Colors.blue, width: 1)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        Tab(child: Text('')),
+                        Tab(child: Text('')),
+                        Tab(child: Text('')),
+                        Tab(child: Text('')),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-            body: EmptyContent(
-              title: 'quelque chose s\'est mal passé',
-              message: 'S\'il vous plait, vérifiez votre connexion internet',
             ),
           );
         }
-        return Material(
-          color: Colors.white,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
       },
     );
   }

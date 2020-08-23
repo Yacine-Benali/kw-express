@@ -17,7 +17,8 @@ class RestaurantDetailBloc {
   List<String> urls;
 
   Future<List<MenuPage>> fetchMenu() async {
-    final t1 = await apiService.fetchRestaurantDetail(restaurant.id);
+    final Tuple2<List<RestaurantMenuHeader>, List<String>> t1 =
+        await apiService.fetchRestaurantDetail(restaurant.id);
     List<RestaurantMenuHeader> headersList = t1.item1;
     List<String> urlsList = t1.item2;
     this.urls = urlsList;
@@ -28,7 +29,6 @@ class RestaurantDetailBloc {
 
       menuPages.add(MenuPage(header: header, foods: foods));
     }
-    //print('done');
     return menuPages;
   }
 

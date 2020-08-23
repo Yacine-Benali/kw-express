@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -7,12 +8,13 @@ import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:tuple/tuple.dart';
+import 'package:http/http.dart' as http;
 
 class APIService {
   APIService({this.api});
   final API api;
   DioCacheManager _dioCacheManager = DioCacheManager(
-      CacheConfig(baseUrl: 'http://fahemnydz.000webhostapp.com'));
+      CacheConfig(baseUrl: 'https://fahemnydz.000webhostapp.com'));
   Options _cacheOptions = buildCacheOptions(
     Duration(days: 7),
     forceRefresh: false,
@@ -27,25 +29,24 @@ class APIService {
     final uri = api.endpointUri(Endpoint.restaurants);
 
     _dio.interceptors.add(_dioCacheManager.interceptor);
+    try {
+      final response = await _dio.post(
+        uri.toString(),
+        options: _cacheOptions,
+      );
 
-    final response = await _dio.post(
-      uri.toString(),
-      options: _cacheOptions,
-    );
-
-    print(response);
-
-    if (response.statusCode == 200) {
-      final LinkedHashMap<String, dynamic> decodedReponse = response.data;
-      final List<dynamic> dataList = decodedReponse['data'];
-      if (dataList.isNotEmpty) {
-        final List<Restaurant> list =
-            dataList.map((data) => Restaurant.fromMap(data)).toList();
-        if (list != null) return list;
+      if (response.statusCode == 200) {
+        final LinkedHashMap<String, dynamic> decodedReponse = response.data;
+        final List<dynamic> dataList = decodedReponse['data'];
+        if (dataList.isNotEmpty) {
+          final List<Restaurant> list =
+              dataList.map((data) => Restaurant.fromMap(data)).toList();
+          if (list != null) return list;
+        }
       }
+    } catch (e) {
+      throw e;
     }
-
-    throw response;
   }
 
   Future<List<String>> fetchSpecialoffer() async {
@@ -77,8 +78,10 @@ class APIService {
 
   Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {
+    print('fetching for $restoId');
     Options _cacheOptions2 = buildCacheOptions(
       Duration(days: 7),
+      subKey: restoId,
       forceRefresh: true,
       maxStale: Duration(days: 7),
       options: Options(
@@ -90,37 +93,46 @@ class APIService {
     FormData formData = FormData.fromMap(params);
     _dio.interceptors.add(_dioCacheManager.interceptor);
 
-    final Response response = await _dio.post(
-      url,
-      options: _cacheOptions2,
-      data: formData,
-    );
+    try {
+      // final response = await http.post(
+      //   url,
+      //   body: params,
+      // );
+      final Response response = await _dio.post(
+        url,
+        options: _cacheOptions2,
+        data: formData,
+      );
+      if (response.statusCode == 200) {
+        final LinkedHashMap<String, dynamic> decodedReponse = response.data;
+        // json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      final LinkedHashMap<String, dynamic> decodedReponse = response.data;
-      final List<dynamic> dataList = decodedReponse['data'];
-      Iterable list = decodedReponse['urls'];
+        final List<dynamic> dataList = decodedReponse['data'];
 
-      List<String> imageUrls = list.map((i) => i['img'].toString()).toList();
+        Iterable imageUrlsTemp = decodedReponse['urls'];
 
-      if (dataList.isNotEmpty && imageUrls.isNotEmpty) {
-        final List<RestaurantMenuHeader> list =
+        List<String> imageUrls =
+            imageUrlsTemp.map((i) => i['img'].toString()).toList();
+        List<RestaurantMenuHeader> restaurantslist = List();
+        restaurantslist =
             dataList.map((data) => RestaurantMenuHeader.fromMap(data)).toList();
+
         final result = Tuple2<List<RestaurantMenuHeader>, List<String>>(
-          list,
+          restaurantslist,
           imageUrls,
         );
         return result;
       }
+    } catch (e) {
+      throw e;
     }
-
-    throw response;
   }
 
   Future<List<Food>> fetchMenu(String restoId, String headerId) async {
     Options _cacheOptions2 = buildCacheOptions(
       Duration(days: 7),
       forceRefresh: true,
+      subKey: '$restoId-$headerId',
       maxStale: Duration(days: 7),
       options: Options(
         responseType: ResponseType.json,
@@ -132,22 +144,25 @@ class APIService {
     FormData formData = FormData.fromMap(params);
     _dio.interceptors.add(_dioCacheManager.interceptor);
 
-    final response = await _dio.post(
-      url,
-      options: _cacheOptions2,
-      data: formData,
-    );
-    if (response.statusCode == 200) {
-      final LinkedHashMap<String, dynamic> decodedReponse = response.data;
-      final List<dynamic> dataList = decodedReponse['data'];
-      if (dataList.isNotEmpty) {
-        final List<Food> list =
-            dataList.map((data) => Food.fromMap(data)).toList();
-        if (list != null) return list;
-      }
-    }
+    try {
+      final response = await _dio.post(
+        url,
+        options: _cacheOptions2,
+        data: formData,
+      );
 
-    throw response;
+      if (response.statusCode == 200) {
+        final LinkedHashMap<String, dynamic> decodedReponse = response.data;
+        final List<dynamic> dataList = decodedReponse['data'];
+        if (dataList.isNotEmpty) {
+          final List<Food> list =
+              dataList.map((data) => Food.fromMap(data)).toList();
+          if (list != null) return list;
+        }
+      }
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> updateVue(String restoId) async {
