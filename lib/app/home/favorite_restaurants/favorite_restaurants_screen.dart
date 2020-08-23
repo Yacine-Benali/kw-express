@@ -50,11 +50,6 @@ class _FavoriteRestaurantsScreenState extends State<FavoriteRestaurantsScreen> {
             } else {
               return Container();
             }
-          } else if (snapshot.hasError) {
-            return EmptyContent(
-              title: 'quelque chose s\'est mal passé',
-              message: 'S\'il vous plait, vérifiez votre connexion internet',
-            );
           }
           return Center(child: CircularProgressIndicator());
         },
