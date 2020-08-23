@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/common_widgets/platform_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum DialogType { commander, reserver }
 

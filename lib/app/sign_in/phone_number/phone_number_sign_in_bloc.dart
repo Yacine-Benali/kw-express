@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kwexpress/app/sign_in/validator.dart';
 import 'package:kwexpress/services/auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:rxdart/rxdart.dart';
 
 enum SignInFormType { input, confirmation }
 

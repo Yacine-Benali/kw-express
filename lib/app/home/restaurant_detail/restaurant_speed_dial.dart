@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_dialog.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
-import 'dart:math' as math;
-
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
-import 'package:kwexpress/constants/size_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantSpeedDial extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 
 class ErrorIconWidget extends StatelessWidget {
-  bool _isError;
+  final bool _isError;
 
   ErrorIconWidget(this._isError);
 

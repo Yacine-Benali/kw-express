@@ -8,9 +8,7 @@ import 'package:kwexpress/app/home/client_space/client_space_bloc.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/assets_path.dart';
-import 'package:kwexpress/services/api_service.dart';
 import 'package:launch_review/launch_review.dart';
-import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class ClientSpaceScreen extends StatefulWidget {

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:kwexpress/app/home/restaurant_detail/food_tile_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/order_screen.dart';
@@ -266,8 +267,11 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: true,
-              title: Text('Mes Restaurants Favoris',
-                  style: TextStyle(color: Colors.grey)),
+              title: AutoSizeText(
+                widget.restaurant.name,
+                maxLines: 1,
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
             body: EmptyContent(
               title: 'quelque chose s\'est mal passé',

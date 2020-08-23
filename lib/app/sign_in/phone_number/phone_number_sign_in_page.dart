@@ -12,7 +12,6 @@ import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 
 class PhoneNumberSignInPage extends StatefulWidget {
   const PhoneNumberSignInPage._({Key key, @required this.bloc})

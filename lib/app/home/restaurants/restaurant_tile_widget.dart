@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +6,7 @@ import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_screen.da
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
-import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/services/local_storage_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RestaurantTileWidget extends StatefulWidget {
   const RestaurantTileWidget({

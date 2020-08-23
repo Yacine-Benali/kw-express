@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/restaurants/restaurant_tile_widget.dart';
@@ -8,9 +6,7 @@ import 'package:kwexpress/app/home/restaurants/swiper_widget.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/constants/assets_path.dart';
-import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
-import 'package:kwexpress/services/auth.dart';
 import 'package:kwexpress/services/local_storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +20,6 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
   RestaurantsBloc bloc;
   Future<List<Restaurant>> restaurantsListFuture;
   Future<SharedPreferences> sharedPrefrencesFuture;
-  int _current;
 
   @override
   void initState() {
@@ -32,7 +27,6 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
     bloc = RestaurantsBloc(apiService: api);
     sharedPrefrencesFuture = SharedPreferences.getInstance();
     restaurantsListFuture = bloc.fetchRestaurants();
-    _current = 0;
     super.initState();
   }
 

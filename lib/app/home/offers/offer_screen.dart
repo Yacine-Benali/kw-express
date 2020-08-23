@@ -2,11 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/offers/offer_bloc.dart';
-import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/constants/assets_path.dart';
-import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +53,7 @@ class _OfferScreenState extends State<OfferScreen> {
           if (snapshot.hasData) {
             final List<String> items = snapshot.data[0];
             final url = snapshot.data[1].elementAt(0);
-            print(url);
+            // print(url);
             Widget image = CachedNetworkImage(
               placeholder: (context, url) => placeHolder,
               errorWidget: (_, __, ___) => placeHolder,

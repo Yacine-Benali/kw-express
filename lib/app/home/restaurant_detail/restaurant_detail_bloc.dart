@@ -3,7 +3,6 @@ import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
-import 'package:kwexpress/services/api.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/location_service.dart';
 import 'package:tuple/tuple.dart';
@@ -29,7 +28,7 @@ class RestaurantDetailBloc {
 
       menuPages.add(MenuPage(header: header, foods: foods));
     }
-    print('done');
+    //print('done');
     return menuPages;
   }
 

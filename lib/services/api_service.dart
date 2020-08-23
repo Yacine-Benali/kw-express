@@ -13,8 +13,14 @@ class APIService {
   final API api;
   DioCacheManager _dioCacheManager = DioCacheManager(
       CacheConfig(baseUrl: 'http://fahemnydz.000webhostapp.com'));
-  Options _cacheOptions =
-      buildCacheOptions(Duration(days: 7), forceRefresh: false);
+  Options _cacheOptions = buildCacheOptions(
+    Duration(days: 7),
+    forceRefresh: false,
+    maxStale: Duration(days: 7),
+    options: Options(
+      responseType: ResponseType.json,
+    ),
+  );
   Dio _dio = Dio();
   //
   Future<List<Restaurant>> fetchRestaurants() async {
@@ -26,6 +32,8 @@ class APIService {
       uri.toString(),
       options: _cacheOptions,
     );
+
+    print(response);
 
     if (response.statusCode == 200) {
       final LinkedHashMap<String, dynamic> decodedReponse = response.data;
@@ -69,14 +77,22 @@ class APIService {
 
   Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {
+    Options _cacheOptions2 = buildCacheOptions(
+      Duration(days: 7),
+      forceRefresh: true,
+      maxStale: Duration(days: 7),
+      options: Options(
+        responseType: ResponseType.json,
+      ),
+    );
     var url = api.endpointUri(Endpoint.restaurantDetail).toString();
     final params = {'Resto': restoId};
     FormData formData = FormData.fromMap(params);
     _dio.interceptors.add(_dioCacheManager.interceptor);
 
-    final response = await _dio.post(
+    final Response response = await _dio.post(
       url,
-      options: _cacheOptions,
+      options: _cacheOptions2,
       data: formData,
     );
 
@@ -102,6 +118,14 @@ class APIService {
   }
 
   Future<List<Food>> fetchMenu(String restoId, String headerId) async {
+    Options _cacheOptions2 = buildCacheOptions(
+      Duration(days: 7),
+      forceRefresh: true,
+      maxStale: Duration(days: 7),
+      options: Options(
+        responseType: ResponseType.json,
+      ),
+    );
     String url = api.endpointUri(Endpoint.menu).toString();
     final params = {'Resto': restoId, 'Speciality': headerId};
 
@@ -110,7 +134,7 @@ class APIService {
 
     final response = await _dio.post(
       url,
-      options: _cacheOptions,
+      options: _cacheOptions2,
       data: formData,
     );
     if (response.statusCode == 200) {
