@@ -12,6 +12,7 @@ import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:polygon_clipper/polygon_border.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -126,235 +127,306 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MenuPage>>(
-      future: menuFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final List<MenuPage> menuPages = snapshot.data;
-          if (menuPages.isNotEmpty) {
-            _tabController = TabController(
-              initialIndex: 0,
-              vsync: this,
-              length: menuPages.length,
-            );
-            return WillPopScope(
-              onWillPop: () {
-                if (cartFoodList.isNotEmpty) {
-                  return showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Panier sera effacé"),
-                          content: Text(
-                              "si vous sortez de ce restaurant votre panier sera effacé"),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("Cancel".toUpperCase()),
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                            ),
-                            FlatButton(
-                              child: Text("OK".toUpperCase()),
-                              onPressed: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop(true);
-                              },
+    return SafeArea(
+      child: Material(
+        child: Stack(
+          children: [
+            FutureBuilder<List<MenuPage>>(
+              future: menuFuture,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final List<MenuPage> menuPages = snapshot.data;
+                  if (menuPages.isNotEmpty) {
+                    _tabController = TabController(
+                      initialIndex: 0,
+                      vsync: this,
+                      length: menuPages.length,
+                    );
+                    return WillPopScope(
+                      onWillPop: () async {
+                        return true;
+                        // if (cartFoodList.isNotEmpty) {
+                        //   return showDialog(
+                        //       context: context,
+                        //       barrierDismissible: false,
+                        //       builder: (BuildContext context) {
+                        //         return AlertDialog(
+                        //           title: Text("Panier sera effacé"),
+                        //           content: Text(
+                        //               "si vous sortez de ce restaurant votre panier sera effacé"),
+                        //           actions: <Widget>[
+                        //             FlatButton(
+                        //               child: Text("Cancel".toUpperCase()),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop(false);
+                        //               },
+                        //             ),
+                        //             FlatButton(
+                        //               child: Text("OK".toUpperCase()),
+                        //               onPressed: () {
+                        //                 Navigator.of(context,
+                        //                         rootNavigator: true)
+                        //                     .pop(true);
+                        //               },
+                        //             ),
+                        //           ],
+                        //         );
+                        //       });
+                        // } else
+                        //   return Future.value(true);
+                      },
+                      child: Scaffold(
+                        key: _scaffoldKey,
+                        backgroundColor: Colors.white,
+                        floatingActionButton: Row(
+                          mainAxisAlignment: showCart
+                              ? MainAxisAlignment.spaceBetween
+                              : MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (showCart) ...[
+                              SizedBox(
+                                width: 130,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 30),
+                                  child: FloatingActionButton.extended(
+                                    onPressed: () async {
+                                      cartFoodList = await Navigator.of(context,
+                                              rootNavigator: false)
+                                          .push(
+                                        MaterialPageRoute(
+                                          builder: (context) => OrderScreen(
+                                            cartFoodList: cartFoodList,
+                                            bloc: bloc,
+                                          ),
+                                          fullscreenDialog: true,
+                                        ),
+                                      );
+                                    },
+                                    label: Text(
+                                      'VOIR PANIER',
+                                      style: TextStyle(fontSize: 11),
+                                    ),
+                                    backgroundColor: AppColors.colorPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: RestaurantSpeedDial(
+                                restaurant: widget.restaurant,
+                              ),
                             ),
                           ],
-                        );
-                      });
-                } else
-                  return Future.value(true);
-              },
-              child: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.white,
-                floatingActionButton: Row(
-                  mainAxisAlignment: showCart
-                      ? MainAxisAlignment.spaceBetween
-                      : MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    if (showCart) ...[
-                      SizedBox(
-                        width: 130,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: FloatingActionButton.extended(
-                            onPressed: () async {
-                              cartFoodList = await Navigator.of(context,
-                                      rootNavigator: false)
-                                  .push(
-                                MaterialPageRoute(
-                                  builder: (context) => OrderScreen(
-                                    cartFoodList: cartFoodList,
-                                    bloc: bloc,
-                                  ),
-                                  fullscreenDialog: true,
+                        ),
+                        body: Column(
+                          children: <Widget>[
+                            SwiperWidget(urls: bloc.getUrls()),
+                            Center(
+                              child: Text(
+                                widget.restaurant.service,
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                              child: Card(
+                                margin: EdgeInsets.all(0),
+                                semanticContainer: false,
+                                child: TabBar(
+                                  labelPadding:
+                                      EdgeInsets.only(left: 20, right: 20),
+                                  isScrollable: true,
+                                  controller: _tabController,
+                                  unselectedLabelColor: Colors.black,
+                                  labelColor: AppColors.colorPrimary,
+                                  labelStyle: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  tabs: getTabBar(menuPages),
                                 ),
-                              );
-                            },
-                            label: Text(
-                              'VOIR PANIER',
-                              style: TextStyle(fontSize: 11),
+                              ),
                             ),
-                            backgroundColor: AppColors.colorPrimary,
-                          ),
+                            Expanded(
+                              flex: 1,
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: getTabBarView(menuPages),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: RestaurantSpeedDial(
-                        restaurant: widget.restaurant,
-                      ),
-                    ),
-                  ],
-                ),
-                body: Column(
-                  children: <Widget>[
-                    SwiperWidget(urls: bloc.getUrls()),
-                    Center(
-                      child: Text(
-                        widget.restaurant.service,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: Card(
-                        margin: EdgeInsets.all(0),
-                        semanticContainer: false,
-                        child: TabBar(
-                          labelPadding: EdgeInsets.only(left: 20, right: 20),
-                          isScrollable: true,
-                          controller: _tabController,
-                          unselectedLabelColor: Colors.black,
-                          labelColor: AppColors.colorPrimary,
-                          labelStyle: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          tabs: getTabBar(menuPages),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: getTabBarView(menuPages),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-        } else {
-          double width = SizeConfig.screenWidth / 3 - 8;
-          _tabController = TabController(
-            initialIndex: 0,
-            vsync: this,
-            length: 4,
-          );
-          List<String> emptyUrls = [''];
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: IgnorePointer(
-              child: Column(
-                children: <Widget>[
-                  SwiperWidget(urls: emptyUrls),
-                  Center(
-                    child: Text(
-                      widget.restaurant.service,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey[200],
-                      highlightColor: Colors.red[100],
-                      child: TabBar(
-                        labelPadding: EdgeInsets.only(left: 4, right: 4),
-                        isScrollable: true,
-                        controller: _tabController,
-                        unselectedLabelColor: Colors.black,
-                        labelColor: AppColors.colorPrimary,
-                        labelStyle: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        tabs: [
-                          Tab(
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border:
-                                      Border.all(color: Colors.blue, width: 1)),
+                    );
+                  }
+                } else {
+                  double width = SizeConfig.screenWidth / 3 - 8;
+                  _tabController = TabController(
+                    initialIndex: 0,
+                    vsync: this,
+                    length: 4,
+                  );
+                  List<String> emptyUrls = [''];
+                  return Scaffold(
+                    backgroundColor: Colors.white,
+                    body: IgnorePointer(
+                      child: Column(
+                        children: <Widget>[
+                          SwiperWidget(urls: emptyUrls),
+                          Center(
+                            child: Text(
+                              widget.restaurant.service,
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w400),
                             ),
                           ),
-                          Tab(
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey[200],
+                              highlightColor: Colors.red[100],
+                              child: TabBar(
+                                labelPadding:
+                                    EdgeInsets.only(left: 4, right: 4),
+                                isScrollable: true,
+                                controller: _tabController,
+                                unselectedLabelColor: Colors.black,
+                                labelColor: AppColors.colorPrimary,
+                                labelStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                indicator: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
-                                  border:
-                                      Border.all(color: Colors.blue, width: 1)),
+                                ),
+                                tabs: [
+                                  Tab(
+                                    child: Container(
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                              color: Colors.blue, width: 1)),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                              color: Colors.blue, width: 1)),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                              color: Colors.blue, width: 1)),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                              color: Colors.blue, width: 1)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Tab(
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border:
-                                      Border.all(color: Colors.blue, width: 1)),
-                            ),
-                          ),
-                          Tab(
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border:
-                                      Border.all(color: Colors.blue, width: 1)),
+                          Expanded(
+                            flex: 1,
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                Tab(child: Text('')),
+                                Tab(child: Text('')),
+                                Tab(child: Text('')),
+                                Tab(child: Text('')),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
+                  );
+                }
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.elliptical((50), (50 / 3)),
+                      topRight: Radius.elliptical((50), (50 / 3))),
+                ),
+                child: FloatingActionButton(
+                  heroTag: null,
+                  shape: PolygonBorder(
+                    sides: 8,
+                    borderRadius: 5.0, // Default 0.0 degrees
+                    rotate: 22.0, // Default 0.0 degrees
+                    border: BorderSide.none, // Default BorderSide.none
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        Tab(child: Text('')),
-                        Tab(child: Text('')),
-                        Tab(child: Text('')),
-                        Tab(child: Text('')),
-                      ],
-                    ),
-                  ),
-                ],
+                  onPressed: () async {
+                    if (cartFoodList.isNotEmpty) {
+                      return showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Panier sera effacé"),
+                              content: Text(
+                                  "si vous sortez de ce restaurant votre panier sera effacé"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("Cancel".toUpperCase()),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text("OK".toUpperCase()),
+                                  onPressed: () {
+                                    print('pop');
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    } else
+                      Navigator.of(context, rootNavigator: true).pop();
+                  },
+                  backgroundColor: Colors.white,
+                ),
               ),
             ),
-          );
-        }
-      },
+          ],
+        ),
+      ),
     );
   }
 }

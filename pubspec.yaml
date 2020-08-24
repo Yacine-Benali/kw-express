@@ -49,6 +49,8 @@ dependencies:
   google_fonts: ^1.1.0
   flutter_local_notifications: ^1.4.4+4
   shimmer: ^1.1.1
+  polygon_clipper: ^1.0.2
+
   #firebase
   firebase_core: ^0.5.0
   firebase_analytics: ^5.0.2
