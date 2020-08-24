@@ -183,17 +183,19 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                         child: Padding(
                           padding: const EdgeInsets.only(left: 30),
                           child: FloatingActionButton.extended(
-                            onPressed: () =>
-                                Navigator.of(context, rootNavigator: false)
-                                    .push(
-                              MaterialPageRoute(
-                                builder: (context) => OrderScreen(
-                                  cartFoodList: cartFoodList,
-                                  bloc: bloc,
+                            onPressed: () async {
+                              cartFoodList = await Navigator.of(context,
+                                      rootNavigator: false)
+                                  .push(
+                                MaterialPageRoute(
+                                  builder: (context) => OrderScreen(
+                                    cartFoodList: cartFoodList,
+                                    bloc: bloc,
+                                  ),
+                                  fullscreenDialog: true,
                                 ),
-                                fullscreenDialog: true,
-                              ),
-                            ),
+                              );
+                            },
                             label: Text(
                               'VOIR PANIER',
                               style: TextStyle(fontSize: 11),

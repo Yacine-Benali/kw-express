@@ -38,7 +38,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.kwexpress.app"
+        applicationId "com.kwexpress.app.ios"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

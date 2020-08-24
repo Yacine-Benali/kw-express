@@ -79,19 +79,19 @@ class APIService {
   Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {
     print('fetching for $restoId');
-    Options _cacheOptions2 = buildCacheOptions(
-      Duration(days: 7),
-      subKey: restoId,
-      forceRefresh: true,
-      maxStale: Duration(days: 7),
-      options: Options(
-        responseType: ResponseType.json,
-      ),
-    );
+    // Options _cacheOptions2 = buildCacheOptions(
+    //   Duration(days: 7),
+    //   subKey: restoId,
+    //   forceRefresh: true,
+    //   maxStale: Duration(days: 7),
+    //   options: Options(
+    //     responseType: ResponseType.json,
+    //   ),
+    // );
     var url = api.endpointUri(Endpoint.restaurantDetail).toString();
     final params = {'Resto': restoId};
     FormData formData = FormData.fromMap(params);
-    _dio.interceptors.add(_dioCacheManager.interceptor);
+    // _dio.interceptors.add(_dioCacheManager.interceptor);
 
     try {
       // final response = await http.post(
@@ -100,7 +100,7 @@ class APIService {
       // );
       final Response response = await _dio.post(
         url,
-        options: _cacheOptions2,
+        // options: _cacheOptions2,
         data: formData,
       );
       if (response.statusCode == 200) {
@@ -129,25 +129,25 @@ class APIService {
   }
 
   Future<List<Food>> fetchMenu(String restoId, String headerId) async {
-    Options _cacheOptions2 = buildCacheOptions(
-      Duration(days: 7),
-      forceRefresh: true,
-      subKey: '$restoId-$headerId',
-      maxStale: Duration(days: 7),
-      options: Options(
-        responseType: ResponseType.json,
-      ),
-    );
+    // Options _cacheOptions2 = buildCacheOptions(
+    //   Duration(days: 7),
+    //   forceRefresh: true,
+    //   subKey: '$restoId-$headerId',
+    //   maxStale: Duration(days: 7),
+    //   options: Options(
+    //     responseType: ResponseType.json,
+    //   ),
+    // );
     String url = api.endpointUri(Endpoint.menu).toString();
     final params = {'Resto': restoId, 'Speciality': headerId};
 
     FormData formData = FormData.fromMap(params);
-    _dio.interceptors.add(_dioCacheManager.interceptor);
+    // _dio.interceptors.add(_dioCacheManager.interceptor);
 
     try {
       final response = await _dio.post(
         url,
-        options: _cacheOptions2,
+        // options: _cacheOptions2,
         data: formData,
       );
 

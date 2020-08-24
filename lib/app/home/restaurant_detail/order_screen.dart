@@ -197,19 +197,24 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Panier'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(child: buildList()),
-          buildReceipt(),
-          buildButton(),
-        ],
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context, rootNavigator: true).pop(cartFoodList);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Panier'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(child: buildList()),
+            buildReceipt(),
+            buildButton(),
+          ],
+        ),
       ),
     );
   }
