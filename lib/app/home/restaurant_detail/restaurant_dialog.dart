@@ -7,7 +7,6 @@ import 'package:kwexpress/common_widgets/platform_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'tile.dart';
 
 enum DialogType { commander, reserver }
 
