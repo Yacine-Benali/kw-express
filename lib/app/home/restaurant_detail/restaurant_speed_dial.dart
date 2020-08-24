@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kwexpress/app/home/restaurant_detail/restaurant_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
+import 'package:kwexpress/constants/assets_path.dart';
+import 'package:kwexpress/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantSpeedDial extends StatefulWidget {
@@ -16,9 +18,12 @@ class RestaurantSpeedDial extends StatefulWidget {
   _RestaurantSpeedDialState createState() => _RestaurantSpeedDialState();
 }
 
+enum DialogType { commander, reserver }
+
 class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
     with TickerProviderStateMixin {
   AnimationController _controller;
+  SvgPicture phone;
 
   @override
   void initState() {
@@ -26,6 +31,7 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
+    phone = SvgPicture.asset(AssetsPath.phone);
 
     super.initState();
   }
@@ -42,6 +48,64 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
     } else {
       throw 'Could not launch url';
     }
+  }
+
+  Widget buildTitle(DialogType dialogType) {
+    switch (dialogType) {
+      case DialogType.commander:
+        return Text(
+          'Passer votre commande :',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal),
+        );
+        break;
+      case DialogType.reserver:
+        return Text(
+          'Reserver une table :',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal),
+        );
+        break;
+    }
+  }
+
+  // ignore: missing_return
+  Widget buildContent(DialogType dialogType) {
+    switch (dialogType) {
+      case DialogType.commander:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              onTap: () async => await launch('tel://${Constants.phoneNumer1}'),
+              leading: SizedBox(width: 20, height: 20, child: phone),
+              title: Text(Constants.phoneNumer1),
+            ),
+            ListTile(
+              onTap: () async =>
+                  await launch('tel://${Constants.phoneNumber2}'),
+              leading: SizedBox(width: 20, height: 20, child: phone),
+              title: Text(Constants.phoneNumber2),
+            )
+          ],
+        );
+        break;
+      case DialogType.reserver:
+        return ListTile(
+          leading: SizedBox(width: 20, height: 20, child: phone),
+          title: Text(Constants.phoneNumer1),
+        );
+        break;
+    }
+  }
+
+  Future<void> show(DialogType dialogType) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        title: buildTitle(dialogType),
+        content: buildContent(dialogType),
+      ),
+    );
   }
 
   @override
@@ -127,14 +191,13 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                   ),
                 ),
                 FloatingActionButton(
-                  heroTag: null,
-                  backgroundColor: AppColors.colorPrimary,
-                  mini: true,
-                  child: Icon(CustomIcons.reservation, color: Colors.white),
-                  onPressed: () => RestaurantDialog(
-                    dialogType: DialogType.reserver,
-                  ).show(context),
-                ),
+                    heroTag: null,
+                    backgroundColor: AppColors.colorPrimary,
+                    mini: true,
+                    child: Icon(CustomIcons.reservation, color: Colors.white),
+                    onPressed: () => show(
+                          DialogType.reserver,
+                        )),
               ],
             ),
           ),
@@ -176,9 +239,9 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
                   backgroundColor: AppColors.colorPrimary,
                   mini: true,
                   child: Icon(CustomIcons.commande, color: Colors.white),
-                  onPressed: () => RestaurantDialog(
-                    dialogType: DialogType.commander,
-                  ).show(context),
+                  onPressed: () => show(
+                    DialogType.commander,
+                  ),
                 ),
               ],
             ),
