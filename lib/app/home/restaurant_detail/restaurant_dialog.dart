@@ -7,7 +7,7 @@ import 'package:kwexpress/common_widgets/platform_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'tile.dart';
+import 'cupertino_list_tile.dart';
 
 enum DialogType { commander, reserver }
 
@@ -77,15 +77,17 @@ class RestaurantDialog extends PlatformWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
-              onTap: () async => await launch('tel://${Constants.phoneNumer1}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumer1}'),
               child: CupertinoListTile(
                 leading: SizedBox(width: 20, height: 20, child: phone),
                 title: Constants.phoneNumer1,
               ),
             ),
+            SizedBox(
+              height: 25,
+            ),
             GestureDetector(
-              onTap: () async =>
-                  await launch('tel://${Constants.phoneNumber2}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumber2}'),
               child: CupertinoListTile(
                 leading: SizedBox(width: 20, height: 20, child: phone),
                 title: Constants.phoneNumber2,
@@ -95,9 +97,15 @@ class RestaurantDialog extends PlatformWidget {
         );
         break;
       case DialogType.reserver:
-        return CupertinoListTile(
-          leading: SizedBox(width: 20, height: 20, child: phone),
-          title: Constants.phoneNumer1,
+        return SizedBox(
+          height: 100,
+          child: GestureDetector(
+            onTap: () async => await launch('tel:${Constants.phoneNumer1}'),
+            child: CupertinoListTile(
+              leading: SizedBox(width: 20, height: 20, child: phone),
+              title: Constants.phoneNumer1,
+            ),
+          ),
         );
         break;
     }

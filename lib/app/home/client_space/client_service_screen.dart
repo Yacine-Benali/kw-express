@@ -71,8 +71,7 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
             ListTile(
               leading: SizedBox(width: 20, height: 20, child: phoneSvg),
               title: Text('Télephone'),
-              onTap: () async =>
-                  await launch('tel://${Constants.phoneNumber2}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumber2}'),
             ),
             ListTile(
               leading: SizedBox(width: 20, height: 20, child: facebookSvg),
@@ -111,8 +110,7 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
             ListTile(
               leading: SizedBox(width: 20, height: 20, child: viberSvg),
               title: Text('Viber'),
-              onTap: () async =>
-                  await launch('tel://${Constants.phoneNumber2}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumber2}'),
             ),
             ListTile(
               leading: SizedBox(width: 20, height: 20, child: gmailSvg),
