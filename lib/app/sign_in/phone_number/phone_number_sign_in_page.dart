@@ -285,21 +285,19 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
 
           return Scaffold(
             extendBodyBehindAppBar: true,
-            body: SafeArea(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.asset(AssetsPath.signInBackground2),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                FittedBox(
+                  fit: BoxFit.fill,
+                  child: Image.asset(AssetsPath.signInBackground2),
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    child: _buildContent(),
                   ),
-                  Center(
-                    child: SingleChildScrollView(
-                      child: _buildContent(),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         });

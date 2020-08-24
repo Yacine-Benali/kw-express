@@ -7,6 +7,7 @@ import 'package:kwexpress/common_widgets/platform_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'tile.dart';
 
 enum DialogType { commander, reserver }
 
@@ -32,17 +33,21 @@ class RestaurantDialog extends PlatformWidget {
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    return CupertinoAlertDialog(
-      title: buildTitle(),
-      content: buildContent(),
+    return Material(
+      child: CupertinoAlertDialog(
+        title: buildTitle(),
+        content: buildContent(),
+      ),
     );
   }
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    return AlertDialog(
-      title: buildTitle(),
-      content: buildContent(),
+    return Material(
+      child: AlertDialog(
+        title: buildTitle(),
+        content: buildContent(),
+      ),
     );
   }
 
@@ -71,24 +76,28 @@ class RestaurantDialog extends PlatformWidget {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
+            GestureDetector(
               onTap: () async => await launch('tel://${Constants.phoneNumer1}'),
-              leading: SizedBox(width: 20, height: 20, child: phone),
-              title: Text(Constants.phoneNumer1),
+              child: CupertinoListTile(
+                leading: SizedBox(width: 20, height: 20, child: phone),
+                title: Constants.phoneNumer1,
+              ),
             ),
-            ListTile(
+            GestureDetector(
               onTap: () async =>
                   await launch('tel://${Constants.phoneNumber2}'),
-              leading: SizedBox(width: 20, height: 20, child: phone),
-              title: Text(Constants.phoneNumber2),
+              child: CupertinoListTile(
+                leading: SizedBox(width: 20, height: 20, child: phone),
+                title: Constants.phoneNumber2,
+              ),
             )
           ],
         );
         break;
       case DialogType.reserver:
-        return ListTile(
+        return CupertinoListTile(
           leading: SizedBox(width: 20, height: 20, child: phone),
-          title: Text(Constants.phoneNumer1),
+          title: Constants.phoneNumer1,
         );
         break;
     }
