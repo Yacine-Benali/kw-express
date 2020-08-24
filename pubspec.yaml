@@ -33,8 +33,7 @@ dependencies:
   dio_http_cache: ^0.2.8  
   dio: ^3.0.10
   geolocator: ^5.3.2+2
-  #TODO add geo location permission for ios
-  #https://www.digitalocean.com/community/tutorials/flutter-geolocator-plugin
+
   flutter_sms: 2.0.0+2
   share: ^0.6.4+3
   launch_review: ^2.0.0
