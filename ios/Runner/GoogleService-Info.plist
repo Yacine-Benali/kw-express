@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>23490928985-oo57obrlmhvod3n8cl1f0qojf9el3jbo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.23490928985-oo57obrlmhvod3n8cl1f0qojf9el3jbo</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>23490928985-ksjldn20c9fh3fc3brmbcvu9bsdf77dn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDjlrMevpkBfnb_kZUHDqZu3ykS7GTBhPk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>23490928985</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kwexpress.app.ios</string>
+	<key>PROJECT_ID</key>
+	<string>kwexpressv1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kwexpressv1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:23490928985:ios:61b0e36aca8ab339ecec48</string>
+	<key>DATABASE_URL</key>
+	<string>https://kwexpressv1.firebaseio.com</string>
+</dict>
+</plist>
