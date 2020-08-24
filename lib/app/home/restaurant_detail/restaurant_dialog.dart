@@ -18,17 +18,11 @@ class RestaurantDialog extends PlatformWidget {
   final SvgPicture phone = SvgPicture.asset(AssetsPath.phone);
 
   Future<bool> show(BuildContext context) async {
-    return Platform.isIOS
-        ? await showCupertinoDialog<bool>(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => this,
-          )
-        : await showDialog<bool>(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => this,
-          );
+    return await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => this,
+    );
   }
 
   @override
@@ -43,11 +37,9 @@ class RestaurantDialog extends PlatformWidget {
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    return Material(
-      child: AlertDialog(
-        title: buildTitle(),
-        content: buildContent(),
-      ),
+    return AlertDialog(
+      title: buildTitle(),
+      content: buildContent(),
     );
   }
 
