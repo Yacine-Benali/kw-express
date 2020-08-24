@@ -43,11 +43,9 @@ class RestaurantDialog extends PlatformWidget {
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    return Material(
-      child: AlertDialog(
-        title: buildTitle(),
-        content: buildContent(),
-      ),
+    return AlertDialog(
+      title: buildTitle(),
+      content: buildContent(),
     );
   }
 
