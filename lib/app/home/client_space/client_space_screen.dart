@@ -25,9 +25,9 @@ class _ClientSpaceScreenState extends State<ClientSpaceScreen> {
   void initState() {
     poweredBy = SvgPicture.asset(AssetsPath.poweredBy);
     if (Platform.isIOS)
-      appLink = 'android app link';
-    else
       appLink = 'ios app link';
+    else
+      appLink = 'android app link';
     super.initState();
   }
 
