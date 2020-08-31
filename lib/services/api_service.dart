@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -8,7 +7,6 @@ import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:tuple/tuple.dart';
-import 'package:http/http.dart' as http;
 
 class APIService {
   APIService({this.api});

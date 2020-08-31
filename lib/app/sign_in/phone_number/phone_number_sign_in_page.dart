@@ -53,6 +53,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ErrorIconWidget _errorWidget = ErrorIconWidget(false);
   SvgPicture svg2;
+  bool isInitFinishe;
   @override
   void dispose() {
     _phoneNumberController.dispose();
@@ -62,10 +63,15 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
 
   @override
   void initState() {
+    isInitFinishe = false;
     controller = StreamController<bool>();
     svg2 = SvgPicture.asset(
       AssetsPath.logo,
       semanticsLabel: 'logo',
+    );
+    Timer(
+      Duration(seconds: 4),
+      () => setState(() => isInitFinishe = true),
     );
 
     super.initState();
@@ -264,11 +270,19 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
         SizedBox(height: 30),
         SubtitleWidget(),
         SizedBox(height: 30),
-        if (!isSmsSent) ...[_buildPhoneNumberField()],
-        if (isSmsSent) ...[_buildSmsField()],
-        SizedBox(height: 30),
-        if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
-        if (isSmsSent) ...[_buildSubmitSmsButton()],
+        if (isInitFinishe) ...[
+          if (!isSmsSent) ...[_buildPhoneNumberField()],
+          if (isSmsSent) ...[_buildSmsField()],
+          SizedBox(height: 30),
+          if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
+          if (isSmsSent) ...[_buildSubmitSmsButton()],
+        ],
+        if (!isInitFinishe) ...[
+          SizedBox(height: 30),
+          SizedBox(height: 30),
+          SizedBox(height: 30),
+          SizedBox(height: 50),
+        ],
         SizedBox(height: 50),
       ],
     );
