@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   SizedBox(
                     height: SizeConfig.safeBlockVertical * 19,
                     width: SizeConfig.safeBlockHorizontal * 48,
-                    child: Image.asset(AssetsPath.logo2),
+                    child: Image.asset(AssetsPath.logo),
                   ),
                   SizedBox(height: 30),
                   SubtitleWidget(),

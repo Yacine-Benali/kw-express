@@ -9,7 +9,8 @@ class OfferBloc {
     List<Restaurant> restaurantList = await apiService.fetchRestaurants();
     List<String> offers = List();
     for (Restaurant restaurant in restaurantList) {
-      if (restaurant.offre != null) offers.add(restaurant.offre);
+      if (restaurant.offre != null) if (restaurant.offre != '')
+        offers.add(restaurant.offre);
     }
     return offers;
   }

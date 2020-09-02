@@ -28,10 +28,6 @@ class RestaurantTileWidget extends StatefulWidget {
 
 class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
   Restaurant get restaurant => widget.restaurant;
-  @override
-  initState() {
-    super.initState();
-  }
 
   Widget _buildProfileImage() {
     return SizedBox(
@@ -102,6 +98,8 @@ class _RestaurantTileWidgetState extends State<RestaurantTileWidget> {
             MaterialPageRoute(
               builder: (context) => RestaurantDetailScreen(
                 restaurant: restaurant,
+                imageCover: widget.imageCover,
+                imageProfile: widget.imageProfile,
               ),
               fullscreenDialog: true,
             ),

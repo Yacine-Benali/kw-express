@@ -65,10 +65,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   void initState() {
     isInitFinishe = false;
     controller = StreamController<bool>();
-    svg2 = SvgPicture.asset(
-      AssetsPath.logo,
-      semanticsLabel: 'logo',
-    );
+
     Timer(
       Duration(seconds: 4),
       () => setState(() => isInitFinishe = true),
@@ -265,7 +262,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
         SizedBox(
           height: SizeConfig.safeBlockVertical * 19,
           width: SizeConfig.safeBlockHorizontal * 48,
-          child: Image.asset(AssetsPath.logo2),
+          child: Image.asset(AssetsPath.logo),
         ),
         SizedBox(height: 30),
         SubtitleWidget(),

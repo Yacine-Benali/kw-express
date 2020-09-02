@@ -20,8 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor:
-          AppColors.colorPrimary, //or set color with: Color(0xFF0000FF)
+      statusBarColor: AppColors.colorPrimary,
     ));
     API api = API();
     return Provider<Auth>(

@@ -1,6 +1,5 @@
 class AssetsPath {
   static const String signInBackground2 = 'assets/drawable_png/bg.png';
-  static const String logo = 'assets/drawable/logo.svg';
   static const String imageCover = 'assets/drawable/resto_building.svg';
   static const String imageProfile = 'assets/drawable/resto_profile.svg';
   static const String phone = 'assets/drawable/phone.svg';
@@ -13,5 +12,5 @@ class AssetsPath {
   static const String restoOffre = 'assets/drawable/resto_offre.svg';
   static const String offre = 'assets/drawable/resto_offre_image.svg';
 
-  static const String logo2 = 'assets/drawable_png/white_logo2.png';
+  static const String logo = 'assets/drawable_png/white-logo.png';
 }

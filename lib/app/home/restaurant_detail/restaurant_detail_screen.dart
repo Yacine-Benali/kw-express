@@ -1,14 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/restaurant_detail/food_tile_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/order_screen.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
+import 'package:kwexpress/app/home/restaurant_detail/restaurant_header_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_speed_dial.dart';
-import 'package:kwexpress/app/home/restaurants/swiper_widget.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
-import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
@@ -25,10 +24,13 @@ class RestaurantDetailScreen extends StatefulWidget {
   const RestaurantDetailScreen({
     Key key,
     @required this.restaurant,
+    @required this.imageProfile,
+    @required this.imageCover,
   }) : super(key: key);
 
   final Restaurant restaurant;
-
+  final SvgPicture imageProfile;
+  final SvgPicture imageCover;
   @override
   _RestaurantDetailScreenState createState() => _RestaurantDetailScreenState();
 }
@@ -84,8 +86,11 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     List<Widget> tabBarList = List(list.length);
     for (int i = 0; i < list.length; i++) {
       tabBarList[i] = Tab(
-          child: Text(
-        list.elementAt(i).header.name,
+          child: Container(
+        alignment: Alignment.center,
+        child: Text(
+          '    ' + list.elementAt(i).header.name + '    ',
+        ),
       ));
     }
     return tabBarList;
@@ -144,36 +149,35 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                     );
                     return WillPopScope(
                       onWillPop: () async {
-                        return true;
-                        // if (cartFoodList.isNotEmpty) {
-                        //   return showDialog(
-                        //       context: context,
-                        //       barrierDismissible: false,
-                        //       builder: (BuildContext context) {
-                        //         return AlertDialog(
-                        //           title: Text("Panier sera effacé"),
-                        //           content: Text(
-                        //               "si vous sortez de ce restaurant votre panier sera effacé"),
-                        //           actions: <Widget>[
-                        //             FlatButton(
-                        //               child: Text("Cancel".toUpperCase()),
-                        //               onPressed: () {
-                        //                 Navigator.of(context).pop(false);
-                        //               },
-                        //             ),
-                        //             FlatButton(
-                        //               child: Text("OK".toUpperCase()),
-                        //               onPressed: () {
-                        //                 Navigator.of(context,
-                        //                         rootNavigator: true)
-                        //                     .pop(true);
-                        //               },
-                        //             ),
-                        //           ],
-                        //         );
-                        //       });
-                        // } else
-                        //   return Future.value(true);
+                        if (cartFoodList.isNotEmpty) {
+                          return showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Panier sera effacé"),
+                                  content: Text(
+                                      "si vous sortez de ce restaurant votre panier sera effacé"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text("Cancel".toUpperCase()),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text("OK".toUpperCase()),
+                                      onPressed: () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop(true);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        } else
+                          return Future.value(true);
                       },
                       child: Scaffold(
                         key: _scaffoldKey,
@@ -222,31 +226,40 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                         ),
                         body: Column(
                           children: <Widget>[
-                            SwiperWidget(urls: bloc.getUrls()),
-                            Center(
-                              child: Text(
-                                widget.restaurant.service,
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w400),
-                              ),
+                            RestaurantHeaderWidget(
+                              restaurant: widget.restaurant,
+                              imageCover: widget.imageCover,
+                              imageProfile: widget.imageProfile,
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                               child: Card(
                                 margin: EdgeInsets.all(0),
                                 semanticContainer: false,
-                                child: TabBar(
-                                  labelPadding:
-                                      EdgeInsets.only(left: 20, right: 20),
-                                  isScrollable: true,
-                                  controller: _tabController,
-                                  unselectedLabelColor: Colors.black,
-                                  labelColor: AppColors.colorPrimary,
-                                  labelStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                  indicatorSize: TabBarIndicatorSize.tab,
-                                  tabs: getTabBar(menuPages),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Center(
+                                      child: TabBar(
+                                        labelPadding: EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                        ),
+                                        isScrollable: true,
+                                        controller: _tabController,
+                                        unselectedLabelColor: Colors.black,
+                                        labelColor: AppColors.colorPrimary,
+                                        labelStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        indicatorSize: TabBarIndicatorSize.tab,
+                                        tabs: getTabBar(menuPages),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -275,13 +288,10 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                     body: IgnorePointer(
                       child: Column(
                         children: <Widget>[
-                          SwiperWidget(urls: emptyUrls),
-                          Center(
-                            child: Text(
-                              widget.restaurant.service,
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w400),
-                            ),
+                          RestaurantHeaderWidget(
+                            restaurant: widget.restaurant,
+                            imageCover: widget.imageCover,
+                            imageProfile: widget.imageProfile,
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -372,56 +382,49 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.elliptical((50), (50 / 3)),
-                      topRight: Radius.elliptical((50), (50 / 3))),
+              child: FloatingActionButton(
+                heroTag: null,
+                shape: PolygonBorder(
+                  sides: 8,
+                  borderRadius: 5.0, // Default 0.0 degrees
+                  rotate: 22.0, // Default 0.0 degrees
+                  border: BorderSide.none, // Default BorderSide.none
                 ),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  shape: PolygonBorder(
-                    sides: 8,
-                    borderRadius: 5.0, // Default 0.0 degrees
-                    rotate: 22.0, // Default 0.0 degrees
-                    border: BorderSide.none, // Default BorderSide.none
-                  ),
-                  onPressed: () async {
-                    if (cartFoodList.isNotEmpty) {
-                      return showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text("Panier sera effacé"),
-                              content: Text(
-                                  "si vous sortez de ce restaurant votre panier sera effacé"),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text("Cancel".toUpperCase()),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                FlatButton(
-                                  child: Text("OK".toUpperCase()),
-                                  onPressed: () {
-                                    print('pop');
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                    } else
-                      Navigator.of(context, rootNavigator: true).pop();
-                  },
-                  backgroundColor: Colors.white,
-                ),
+                child: Icon(Icons.chevron_left),
+                onPressed: () async {
+                  if (cartFoodList.isNotEmpty) {
+                    return showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Panier sera effacé"),
+                            content: Text(
+                                "si vous sortez de ce restaurant votre panier sera effacé"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("Cancel".toUpperCase()),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text("OK".toUpperCase()),
+                                onPressed: () {
+                                  print('pop');
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  } else
+                    Navigator.of(context, rootNavigator: true).pop();
+                },
+                backgroundColor: Colors.white.withOpacity(0.1),
               ),
             ),
           ],
