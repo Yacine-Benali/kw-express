@@ -1,14 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kwexpress/app/landing_page.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/services/api.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:kwexpress/services/firebase_auth.dart';
 import 'package:provider/provider.dart';
-
-import 'app/home/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.red,
           ),
-          home: SplashScreen(),
+          home: LandingPage(),
         ),
       ),
     );

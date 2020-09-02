@@ -23,56 +23,66 @@ class APIService {
   );
   Dio _dio = Dio();
   //
-  Future<List<Restaurant>> fetchRestaurants() async {
+  Future<Tuple2<List<Restaurant>, List<String>>> fetchRestaurants() async {
     final uri = api.endpointUri(Endpoint.restaurants);
 
-    _dio.interceptors.add(_dioCacheManager.interceptor);
+    // _dio.interceptors.add(_dioCacheManager.interceptor);
     try {
       final response = await _dio.post(
         uri.toString(),
-        options: _cacheOptions,
+        // options: _cacheOptions,
       );
 
       if (response.statusCode == 200) {
         final LinkedHashMap<String, dynamic> decodedReponse = response.data;
         final List<dynamic> dataList = decodedReponse['data'];
+        final List<dynamic> dataList2 = decodedReponse['offre'];
+        List<Restaurant> restaurantsList;
+        List<String> offersList;
         if (dataList.isNotEmpty) {
-          final List<Restaurant> list =
+          restaurantsList =
               dataList.map((data) => Restaurant.fromMap(data)).toList();
-          if (list != null) return list;
         }
+        if (dataList2.isNotEmpty) {
+          offersList = List();
+
+          for (dynamic data in dataList2) {
+            offersList.add(data['imgUrl'].toString());
+          }
+        }
+        return Tuple2<List<Restaurant>, List<String>>(
+            restaurantsList, offersList);
       }
     } catch (e) {
       throw e;
     }
   }
 
-  Future<List<String>> fetchSpecialoffer() async {
-    final uri = api.endpointUri(Endpoint.restaurants);
+  // Future<List<String>> fetchSpecialoffer() async {
+  //   final uri = api.endpointUri(Endpoint.restaurants);
 
-    _dio.interceptors.add(_dioCacheManager.interceptor);
+  //   _dio.interceptors.add(_dioCacheManager.interceptor);
 
-    final response = await _dio.post(
-      uri.toString(),
-      options: _cacheOptions,
-    );
+  //   final response = await _dio.post(
+  //     uri.toString(),
+  //     options: _cacheOptions,
+  //   );
 
-    if (response.statusCode == 200) {
-      final LinkedHashMap<String, dynamic> decodedReponse = response.data;
-      final List<dynamic> dataList = decodedReponse['offre'];
-      print(dataList);
-      if (dataList.isNotEmpty) {
-        final List<String> list = List();
+  //   if (response.statusCode == 200) {
+  //     final LinkedHashMap<String, dynamic> decodedReponse = response.data;
+  //     final List<dynamic> dataList = decodedReponse['offre'];
+  //     if (dataList.isNotEmpty) {
+  //       final List<String> list = List();
 
-        for (dynamic data in dataList) {
-          list.add(data['imgUrl'].toString());
-        }
-        if (list != null) return list;
-      }
-    }
+  //       for (dynamic data in dataList) {
+  //         list.add(data['imgUrl'].toString());
+  //       }
+  //       if (list != null) return list;
+  //     }
+  //   }
 
-    throw response;
-  }
+  //   throw response;
+  // }
 
   Future<Tuple2<List<RestaurantMenuHeader>, List<String>>>
       fetchRestaurantDetail(String restoId) async {

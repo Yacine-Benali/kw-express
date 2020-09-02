@@ -2,21 +2,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/offers/offer_bloc.dart';
-import 'package:kwexpress/common_widgets/empty_content.dart';
-import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
+import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:provider/provider.dart';
 
 class OfferScreen extends StatefulWidget {
+  const OfferScreen({
+    Key key,
+    @required this.restaurantsList,
+    @required this.specialOffersList,
+  }) : super(key: key);
+
+  final List<Restaurant> restaurantsList;
+  final List<String> specialOffersList;
   @override
   _OfferScreenState createState() => _OfferScreenState();
 }
 
 class _OfferScreenState extends State<OfferScreen> {
   OfferBloc bloc;
-  Future<List<String>> restaurantsListFuture;
-  Future<List<String>> offerList;
+  List<String> restoOffersList;
   SvgPicture placeHolder;
 
   @override
@@ -24,18 +30,23 @@ class _OfferScreenState extends State<OfferScreen> {
     placeHolder = SvgPicture.asset(AssetsPath.offre);
     APIService api = Provider.of<APIService>(context, listen: false);
     bloc = OfferBloc(apiService: api);
-    restaurantsListFuture = bloc.fetchOffers();
-    offerList = bloc.fetchSpecialOffer();
+    restoOffersList = bloc.fetchOffers(widget.restaurantsList);
+    final url = widget.specialOffersList.elementAt(0);
+    Widget image = CachedNetworkImage(
+      placeholder: (context, url) => placeHolder,
+      errorWidget: (_, __, ___) => placeHolder,
+      imageUrl: url,
+    );
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      return showDialog(
+        context: context,
+        builder: (_) => ImageDialog(
+          imageProvider: image,
+        ),
+      );
+    });
     super.initState();
-  }
-
-  showpop(context) async {
-    await PlatformAlertDialog(
-      defaultActionText: 'ok',
-      content: 'null',
-      title: 'null',
-    ).show(context);
   }
 
   @override
@@ -47,34 +58,7 @@ class _OfferScreenState extends State<OfferScreen> {
         elevation: 1,
         title: Text('Offres Restaurants', style: TextStyle(color: Colors.grey)),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: Future.wait([restaurantsListFuture, offerList]),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasData) {
-            final List<String> items = snapshot.data[0];
-            final url = snapshot.data[1].elementAt(0);
-            // print(url);
-            Widget image = CachedNetworkImage(
-              placeholder: (context, url) => placeHolder,
-              errorWidget: (_, __, ___) => placeHolder,
-              imageUrl: url,
-            );
-
-            if (items.isNotEmpty) {
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => showDialog(
-                  context: context,
-                  builder: (_) => ImageDialog(
-                    imageProvider: image,
-                  ),
-                ),
-              );
-              return _buildList(items);
-            }
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+      body: _buildList(restoOffersList),
     );
   }
 
@@ -83,6 +67,7 @@ class _OfferScreenState extends State<OfferScreen> {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
+        print(items[index]);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(

@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_bloc.dart';
 import 'package:kwexpress/app/home/restaurants/restaurant_tile_widget.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
-import 'package:kwexpress/common_widgets/empty_content.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/local_storage_service.dart';
@@ -11,6 +10,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteRestaurantsScreen extends StatefulWidget {
+  const FavoriteRestaurantsScreen({
+    Key key,
+    @required this.restaurantsList,
+    @required this.pref,
+  }) : super(key: key);
+
+  final List<Restaurant> restaurantsList;
+  final SharedPreferences pref;
   @override
   _FavoriteRestaurantsScreenState createState() =>
       _FavoriteRestaurantsScreenState();
@@ -18,15 +25,16 @@ class FavoriteRestaurantsScreen extends StatefulWidget {
 
 class _FavoriteRestaurantsScreenState extends State<FavoriteRestaurantsScreen> {
   FavoriteRestaurantsBloc bloc;
-  Future<List<Restaurant>> restaurantsListFuture;
-  Future<SharedPreferences> sharedPrefrencesFuture;
+  List<Restaurant> restaurantsList;
+  SharedPreferences pref;
 
   @override
   void initState() {
     APIService api = Provider.of<APIService>(context, listen: false);
     bloc = FavoriteRestaurantsBloc(apiService: api);
-    sharedPrefrencesFuture = SharedPreferences.getInstance();
-    restaurantsListFuture = bloc.fetchRestaurants();
+    restaurantsList = widget.restaurantsList;
+    pref = widget.pref;
+    restaurantsList = bloc.fetchRestaurants(pref, restaurantsList);
     super.initState();
   }
 
@@ -39,21 +47,7 @@ class _FavoriteRestaurantsScreenState extends State<FavoriteRestaurantsScreen> {
         title: Text('Mes Restaurants Favoris',
             style: TextStyle(color: Colors.grey)),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: Future.wait([restaurantsListFuture, sharedPrefrencesFuture]),
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.hasData) {
-            final List<Restaurant> items = snapshot.data[0];
-            final SharedPreferences pref = snapshot.data[1];
-            if (items.isNotEmpty) {
-              return _buildList(items, pref);
-            } else {
-              return Container();
-            }
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+      body: _buildList(restaurantsList, pref),
     );
   }
 

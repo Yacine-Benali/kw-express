@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:kwexpress/app/landing_page.dart';
 import 'package:kwexpress/app/sign_in/phone_number/subtitle_widget.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/size_config.dart';
@@ -14,15 +11,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(
-      Duration(seconds: 4),
-      () => Navigator.of(context, rootNavigator: false).push(
-        MaterialPageRoute(
-          builder: (context) => LandingPage(),
-          fullscreenDialog: true,
-        ),
-      ),
-    );
+    // Timer(
+    //   Duration(seconds: 4),
+    //   () => Navigator.of(context, rootNavigator: false).push(
+    //     MaterialPageRoute(
+    //       builder: (context) => LandingPage(),
+    //       fullscreenDialog: true,
+    //     ),
+    //   ),
+    // );
     super.initState();
   }
 
