@@ -84,9 +84,13 @@ class _OfferScreenState extends State<OfferScreen> {
                 errorWidget: (_, __, ___) => SizedBox(
                   child: restoOffre,
                 ),
-                imageBuilder: (context, imageProvider) => FittedBox(
-                  child: restoOffre,
-                  fit: BoxFit.fill,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),

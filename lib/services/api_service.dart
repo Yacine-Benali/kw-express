@@ -15,6 +15,7 @@ class APIService {
   Future<Tuple2<List<Restaurant>, List<String>>> fetchRestaurants() async {
     final uri = api.endpointUri(Endpoint.restaurants);
 
+    await Future.delayed(Duration(milliseconds: 500));
     final response = await http.post(
       uri,
     );

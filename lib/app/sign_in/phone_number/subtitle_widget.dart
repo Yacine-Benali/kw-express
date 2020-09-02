@@ -27,7 +27,7 @@ class _SubtitleWidgetState extends State<SubtitleWidget> {
     changeOpacity();
 
     timer = Timer.periodic(
-      Duration(seconds: 1),
+      Duration(milliseconds: 1000),
       (Timer t) {
         index++;
         setState(() {});

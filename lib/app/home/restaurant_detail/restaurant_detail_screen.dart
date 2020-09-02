@@ -296,6 +296,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                             child: Shimmer.fromColors(
+                              period: Duration(milliseconds: 500),
                               baseColor: Colors.grey[200],
                               highlightColor: Colors.red[100],
                               child: TabBar(

@@ -53,7 +53,6 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ErrorIconWidget _errorWidget = ErrorIconWidget(false);
   SvgPicture svg2;
-  bool isInitFinishe;
   @override
   void dispose() {
     _phoneNumberController.dispose();
@@ -63,13 +62,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
 
   @override
   void initState() {
-    isInitFinishe = false;
     controller = StreamController<bool>();
-
-    Timer(
-      Duration(seconds: 4),
-      () => setState(() => isInitFinishe = true),
-    );
 
     super.initState();
   }
@@ -212,44 +205,48 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   }
 
   Widget _buildPhoneNumberField() {
+    double padding = SizeConfig.safeBlockHorizontal * 20;
+
     return SizedBox(
-      width: SizeConfig.safeBlockHorizontal * 48 + 50,
-      child: Form(
-        key: _formKey,
-        child: TextFormField(
-          controller: _phoneNumberController,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white),
-          //controller: _phoneNumberController,
-          decoration: InputDecoration(
-            suffixIcon: _errorWidget,
-            counterText: '',
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 2.5,
+      child: Padding(
+        padding: EdgeInsets.only(right: padding, left: padding),
+        child: Form(
+          key: _formKey,
+          child: TextFormField(
+            controller: _phoneNumberController,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+            //controller: _phoneNumberController,
+            decoration: InputDecoration(
+              suffixIcon: _errorWidget,
+              counterText: '',
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey,
+                  width: 2.5,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 2.5,
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey,
+                  width: 2.5,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              borderRadius: BorderRadius.circular(10.0),
+              hintStyle: TextStyle(color: Colors.grey),
+              hintText: '       entrer vos numero',
             ),
-            hintStyle: TextStyle(color: Colors.grey),
-            hintText: 'entrer vos numero',
+            maxLength: 10,
+            autocorrect: false,
+            validator: (String phoneNumber) =>
+                bloc.validatePhoneNumber(phoneNumber),
+            keyboardType: TextInputType.phone,
+            keyboardAppearance: Brightness.light,
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
           ),
-          maxLength: 10,
-          autocorrect: false,
-          validator: (String phoneNumber) =>
-              bloc.validatePhoneNumber(phoneNumber),
-          keyboardType: TextInputType.phone,
-          keyboardAppearance: Brightness.light,
-          inputFormatters: <TextInputFormatter>[
-            WhitelistingTextInputFormatter.digitsOnly,
-          ],
         ),
       ),
     );
@@ -267,19 +264,11 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
         SizedBox(height: 30),
         SubtitleWidget(),
         SizedBox(height: 30),
-        if (isInitFinishe) ...[
-          if (!isSmsSent) ...[_buildPhoneNumberField()],
-          if (isSmsSent) ...[_buildSmsField()],
-          SizedBox(height: 30),
-          if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
-          if (isSmsSent) ...[_buildSubmitSmsButton()],
-        ],
-        if (!isInitFinishe) ...[
-          SizedBox(height: 30),
-          SizedBox(height: 30),
-          SizedBox(height: 30),
-          SizedBox(height: 50),
-        ],
+        if (!isSmsSent) ...[_buildPhoneNumberField()],
+        if (isSmsSent) ...[_buildSmsField()],
+        SizedBox(height: 30),
+        if (!isSmsSent) ...[_buildSubmitPhoneNumberButton()],
+        if (isSmsSent) ...[_buildSubmitSmsButton()],
         SizedBox(height: 50),
       ],
     );

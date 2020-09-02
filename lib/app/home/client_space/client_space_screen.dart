@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kwexpress/app/home/client_space/client_service_screen.dart';
 import 'package:kwexpress/app/home/client_space/client_space_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ClientSpaceScreen extends StatefulWidget {
   @override
@@ -104,25 +106,57 @@ class _ClientSpaceScreenState extends State<ClientSpaceScreen> {
             ),
           ),
           Expanded(
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'poweredBy',
-                      style: GoogleFonts.cedarvilleCursive(
-                        color: AppColors.colorPrimary,
+            child: GestureDetector(
+              onLongPress: () => Fluttertoast.showToast(
+                msg: "this app was develppped by Benali Technlogies",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.grey[100],
+                textColor: Colors.black,
+                fontSize: 16.0,
+              ),
+              onTap: () async {
+                String fbProtocolUrl;
+                if (Platform.isIOS) {
+                  fbProtocolUrl = 'fb://profile/1245238658965258';
+                } else {
+                  fbProtocolUrl = 'fb://page/1245238658965258';
+                }
+
+                String fallbackUrl =
+                    'https://www.facebook.com/1245238658965258/';
+                try {
+                  bool launched =
+                      await launch(fbProtocolUrl, forceSafariVC: false);
+
+                  if (!launched) {
+                    await launch(fallbackUrl, forceSafariVC: false);
+                  }
+                } catch (e) {
+                  await launch(fallbackUrl, forceSafariVC: false);
+                }
+              },
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'poweredBy',
+                        style: GoogleFonts.cedarvilleCursive(
+                          color: AppColors.colorPrimary,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: poweredBy,
-                    ),
-                  ],
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: poweredBy,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
