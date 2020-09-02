@@ -67,7 +67,7 @@ class _OfferScreenState extends State<OfferScreen> {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        print(items[index]);
+        // print(items[index]);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
