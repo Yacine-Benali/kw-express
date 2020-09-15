@@ -40,4 +40,19 @@ class RestaurantsBloc {
     }
     return temp;
   }
+
+  Future<List<Restaurant>> getResetaurantSearch(
+      List<Restaurant> items, String search) async {
+    print("Resident search = $search");
+    if (search == "empty") return [];
+    if (search == "error") throw Error();
+    List<Restaurant> filteredSearchList = [];
+
+    for (Restaurant s in items) {
+      if (s.name.toLowerCase().contains(search.toLowerCase())) {
+        filteredSearchList.add(s);
+      }
+    }
+    return filteredSearchList;
+  }
 }

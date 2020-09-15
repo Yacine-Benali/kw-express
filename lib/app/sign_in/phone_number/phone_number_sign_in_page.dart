@@ -218,7 +218,6 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
             style: TextStyle(color: Colors.white),
             //controller: _phoneNumberController,
             decoration: InputDecoration(
-              suffixIcon: _errorWidget,
               counterText: '',
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -235,7 +234,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               hintStyle: TextStyle(color: Colors.grey),
-              hintText: '       entrer vos numero',
+              hintText: 'entrer vos numero',
             ),
             maxLength: 10,
             autocorrect: false,
@@ -255,6 +254,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
   Widget _buildContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
           height: SizeConfig.safeBlockVertical * 19,

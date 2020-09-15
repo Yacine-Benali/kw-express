@@ -75,13 +75,12 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              onTap: () async => await launch('tel://${Constants.phoneNumer1}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumer1}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumer1),
             ),
             ListTile(
-              onTap: () async =>
-                  await launch('tel://${Constants.phoneNumber2}'),
+              onTap: () async => await launch('tel:${Constants.phoneNumber2}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumber2),
             )
