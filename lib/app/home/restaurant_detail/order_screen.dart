@@ -35,6 +35,7 @@ class _OrderScreenState extends State<OrderScreen> {
     sortedOrder = widget.bloc.getSortedOrder(widget.cartFoodList);
     foodPrice = widget.bloc.calculateFoodPrice(widget.cartFoodList);
     fullOrderPrice = foodPrice + Constants.deliveryPrice;
+    //print(widget.cartFoodList.length);
     super.initState();
   }
 
@@ -164,7 +165,7 @@ class _OrderScreenState extends State<OrderScreen> {
           elevation: 3,
           child: ListTile(
             title: Text(
-              repetition.toString() + ' * ${food.header.name} - ${food.name}',
+              repetition.toString() + ' * ${food.header?.name} - ${food?.name}',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Text(

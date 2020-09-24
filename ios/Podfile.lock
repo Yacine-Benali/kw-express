@@ -81,6 +81,8 @@ PODS:
     - Flutter
   - flutter_sms (1.1.0):
     - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -147,6 +149,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_sms (from `.symlinks/plugins/flutter_sms/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
@@ -193,6 +196,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_sms:
     :path: ".symlinks/plugins/flutter_sms/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
   launch_review:
@@ -229,6 +234,7 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_sms: 91ce41530f55c85d6524d82307a5d555844c086a
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: f7622e0e7e2a24718285b73916d60c4a54b9f5b6
   GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185
@@ -248,4 +254,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0acb3e6167c5a0200d002d6553c8d2a60c63f846
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
