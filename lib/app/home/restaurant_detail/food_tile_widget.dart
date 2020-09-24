@@ -22,6 +22,7 @@ class _FoodTileWidgetState extends State<FoodTileWidget> {
       child: Card(
         elevation: 3,
         child: ListTile(
+          onTap: () => widget.onSelected(widget.food),
           title: Text(
             widget.food.name,
             style: TextStyle(fontWeight: FontWeight.bold),
