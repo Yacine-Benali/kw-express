@@ -49,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
         msg:
             "L'application K&W Express a besoin de cette permission pour son bon foncionnement",
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.grey,
         textColor: Colors.white,
         fontSize: 16.0,
       );

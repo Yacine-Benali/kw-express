@@ -16,6 +16,12 @@ class FoodTileWidget extends StatefulWidget {
 
 class _FoodTileWidgetState extends State<FoodTileWidget> {
   @override
+  void initState() {
+    //print(widget.food.header);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),

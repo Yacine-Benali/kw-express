@@ -5,7 +5,7 @@ import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class RestaurantSpeedDial extends StatefulWidget {
   final Restaurant restaurant;
@@ -39,14 +39,18 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
   void launchMaps() async {
     String googleUrl = widget.restaurant.location;
     String appleUrl = widget.restaurant.location;
-    if (await canLaunch("comgooglemaps://")) {
-      print('launching com googleUrl');
-      await launch(googleUrl);
-    } else if (await canLaunch(appleUrl)) {
-      print('launching apple url');
-      await launch(appleUrl);
-    } else {
-      throw 'Could not launch url';
+    try {
+      if (await UrlLauncher.canLaunch("comgooglemaps://")) {
+        print('launching com googleUrl');
+        await UrlLauncher.launch(googleUrl);
+      } else if (await UrlLauncher.canLaunch(appleUrl)) {
+        print('launching apple url');
+        await UrlLauncher.launch(appleUrl);
+      } else {
+        throw 'Could not launch url';
+      }
+    } on Exception catch (e) {
+      print(e);
     }
   }
 
@@ -75,12 +79,14 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              onTap: () async => await launch('tel:${Constants.phoneNumer1}'),
+              onTap: () async =>
+                  await UrlLauncher.launch('tel:${Constants.phoneNumer1}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumer1),
             ),
             ListTile(
-              onTap: () async => await launch('tel:${Constants.phoneNumber2}'),
+              onTap: () async =>
+                  await UrlLauncher.launch('tel:${Constants.phoneNumber2}'),
               leading: SizedBox(width: 20, height: 20, child: phone),
               title: Text(Constants.phoneNumber2),
             )
@@ -89,6 +95,8 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
         break;
       case DialogType.reserver:
         return ListTile(
+          onTap: () async =>
+              await UrlLauncher.launch('tel:${Constants.phoneNumer1}'),
           leading: SizedBox(width: 20, height: 20, child: phone),
           title: Text(Constants.phoneNumer1),
         );

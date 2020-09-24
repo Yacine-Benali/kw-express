@@ -24,18 +24,20 @@ class RestaurantDetailBloc {
     this.urls = urlsList;
     List<MenuPage> menuPages = List();
     List<Future<List<Food>>> foodsFuture = List();
-    print('start');
+    //print('start');
     Stopwatch stopwatch = Stopwatch()..start();
     for (RestaurantMenuHeader header in headersList) {
       foodsFuture.add(apiService.fetchMenu(restaurant.id, header.id));
     }
     final List<List<Food>> foods = await Future.wait(foodsFuture);
     // foods = listlistfoods.expand((x) => x).toList();
-    print('api response executed in ${stopwatch.elapsed}');
+    //print('api response executed in ${stopwatch.elapsed}');
     for (int i = 0; i < headersList.length; i++) {
+      for (Food food in foods[i]) food.header = headersList[i];
+
       menuPages.add(MenuPage(header: headersList[i], foods: foods[i]));
     }
-    print('bloc done executed in ${stopwatch.elapsed}');
+    //print('bloc done executed in ${stopwatch.elapsed}');
 
     return menuPages;
   }

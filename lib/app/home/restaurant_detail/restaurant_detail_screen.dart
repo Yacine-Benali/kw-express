@@ -410,7 +410,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                               FlatButton(
                                 child: Text("OK".toUpperCase()),
                                 onPressed: () {
-                                  print('pop');
+                                  //print('pop');
                                   Navigator.of(context, rootNavigator: true)
                                       .pop();
                                   Navigator.of(context, rootNavigator: true)
