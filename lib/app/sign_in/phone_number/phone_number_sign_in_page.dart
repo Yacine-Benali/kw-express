@@ -279,27 +279,28 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
     SizeConfig.init(context);
 
     return StreamBuilder<bool>(
-        stream: controller.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) isSmsSent = snapshot.data;
+      stream: controller.stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) isSmsSent = snapshot.data;
 
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                FittedBox(
-                  fit: BoxFit.fill,
-                  child: Image.asset(AssetsPath.signInBackground2),
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              FittedBox(
+                fit: BoxFit.fill,
+                child: Image.asset(AssetsPath.signInBackground2),
+              ),
+              Center(
+                child: SingleChildScrollView(
+                  child: _buildContent(),
                 ),
-                Center(
-                  child: SingleChildScrollView(
-                    child: _buildContent(),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
