@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_screen.dart';
 import 'package:kwexpress/app/home/offers/offer_screen.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
-import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/firebase_messaging_service.dart';
@@ -45,13 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
       Position position = await geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best);
       locationService.position = position;
-    } on PlatformException catch (e) {
-      PlatformExceptionAlertDialog(
-        title: 'error getting location',
-        exception: e,
-      ).show(context);
     } catch (e) {
-      print(e);
+      Fluttertoast.showToast(
+        msg:
+            "L'application K&W Express a besoin de cette permission pour son bon foncionnement",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
 

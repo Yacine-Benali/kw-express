@@ -234,7 +234,7 @@ class _PhoneNumberSignInPageState extends State<PhoneNumberSignInPage> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               hintStyle: TextStyle(color: Colors.grey),
-              hintText: 'entrer vos numero',
+              hintText: 'entrer votre numero',
             ),
             maxLength: 10,
             autocorrect: false,
