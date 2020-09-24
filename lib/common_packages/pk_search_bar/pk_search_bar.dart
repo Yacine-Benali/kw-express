@@ -350,6 +350,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
 
   Widget _buildListView(
       List<T> items, Widget Function(T item, int index) builder) {
+    final widthMax = MediaQuery.of(context).size.width;
     return Padding(
       padding: widget.listPadding,
       child: StaggeredGridView.countBuilder(
@@ -363,6 +364,87 @@ class _SearchBarState<T> extends State<SearchBar<T>>
         crossAxisSpacing: widget.crossAxisSpacing,
         addAutomaticKeepAlives: true,
         itemBuilder: (BuildContext context, int index) {
+          if (index == 0) {
+            return Padding(
+              padding: widget.searchBarPadding,
+              child: SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Flexible(
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        width: widthMax,
+                        decoration: BoxDecoration(
+                          borderRadius: widget.searchBarStyle.borderRadius,
+                          color: widget.searchBarStyle.backgroundColor,
+                        ),
+                        child: Padding(
+                          padding: widget.searchBarStyle.padding,
+                          child: Theme(
+                            child: Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: TextField(
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      controller: _searchQueryController,
+                                      textAlign: TextAlign.center,
+                                      onChanged: _onTextChanged,
+                                      style: widget.textStyle,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(10.0),
+                                        icon: widget.icon,
+                                        border: InputBorder.none,
+                                        hintText: widget.hintText,
+                                        hintStyle: widget.hintStyle,
+                                        suffix: Opacity(
+                                          opacity: 0,
+                                          child: widget.icon,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  _searchQueryController.text.isNotEmpty
+                                      ? Center(
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                _clear();
+                                              });
+                                            },
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(32)),
+                                            child: Container(
+                                              width: 32,
+                                              height: 32,
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : new Container(),
+                                ],
+                              ),
+                            ),
+                            data: Theme.of(context).copyWith(
+                              primaryColor: widget.iconActiveColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
           return builder(items[index], index);
         },
       ),
@@ -389,115 +471,13 @@ class _SearchBarState<T> extends State<SearchBar<T>>
   Widget build(BuildContext context) {
     final widthMax = MediaQuery.of(context).size.width;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: widget.searchBarPadding,
-          child: Container(
-//            color: Colors.red,
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    width: widthMax,
-                    decoration: BoxDecoration(
-                      borderRadius: widget.searchBarStyle.borderRadius,
-                      color: widget.searchBarStyle.backgroundColor,
-                    ),
-                    child: Padding(
-                      padding: widget.searchBarStyle.padding,
-                      child: Theme(
-                        child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  textAlignVertical: TextAlignVertical.center,
-                                  controller: _searchQueryController,
-                                  textAlign: TextAlign.center,
-                                  onChanged: _onTextChanged,
-                                  style: widget.textStyle,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    icon: widget.icon,
-                                    border: InputBorder.none,
-                                    hintText: widget.hintText,
-                                    hintStyle: widget.hintStyle,
-                                    suffix: Opacity(
-                                      opacity: 0,
-                                      child: widget.icon,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              _searchQueryController.text.isNotEmpty
-                                  ? Center(
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _clear();
-                                          });
-                                        },
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(32)),
-                                        child: Container(
-                                          width: 32,
-                                          height: 32,
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.clear,
-                                              size: 24,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : new Container(),
-                            ],
-                          ),
-                        ),
-                        data: Theme.of(context).copyWith(
-                          primaryColor: widget.iconActiveColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 5),
-                //   child: GestureDetector(
-                //     onTap: _cancel,
-                //     child: AnimatedOpacity(
-                //       opacity: 1.0,
-                //       curve: Curves.easeIn,
-                //       duration: Duration(milliseconds: _animate ? 1000 : 0),
-                //       child: AnimatedContainer(
-                //         duration: Duration(milliseconds: 200),
-                //         width: MediaQuery.of(context).size.width * .130,
-                //         child: Container(
-                //           color: Colors.transparent,
-                //           child: Center(
-                //             child: widget.cancellationWidget,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
         Padding(
           padding: widget.headerPadding,
           child: widget.header ?? Container(),
         ),
-        Expanded(
-          child: _buildContent(context),
-        ),
+        Expanded(child: _buildContent(context)),
       ],
     );
   }

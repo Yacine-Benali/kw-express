@@ -139,8 +139,9 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
             FutureBuilder<List<MenuPage>>(
               future: menuFuture,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot?.hasData) {
                   final List<MenuPage> menuPages = snapshot.data;
+                  print(menuPages.length);
                   if (menuPages.isNotEmpty) {
                     _tabController = TabController(
                       initialIndex: 0,

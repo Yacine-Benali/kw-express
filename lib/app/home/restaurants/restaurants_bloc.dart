@@ -43,7 +43,6 @@ class RestaurantsBloc {
 
   Future<List<Restaurant>> getResetaurantSearch(
       List<Restaurant> items, String search) async {
-    print("Resident search = $search");
     if (search == "empty") return [];
     if (search == "error") throw Error();
     List<Restaurant> filteredSearchList = [];
