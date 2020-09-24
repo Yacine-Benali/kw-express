@@ -41,11 +41,9 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
       auth: auth,
     );
     if (Platform.isIOS)
-      appLink = 'ios app link';
+      appLink = 'https://apps.apple.com/us/app/id1533322170';
     else
       appLink = 'android app link';
-
-    print(appLink);
 
     poweredBy = SvgPicture.asset(AssetsPath.poweredBy);
     phoneSvg = SvgPicture.asset(AssetsPath.phone);
