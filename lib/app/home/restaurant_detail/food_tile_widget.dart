@@ -21,32 +21,29 @@ class _FoodTileWidgetState extends State<FoodTileWidget> {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 3,
-        child: InkWell(
-          onTap: () => widget.onSelected(widget.food),
-          child: ListTile(
-            title: Text(
-              widget.food.name,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(widget.food.info),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(
-                    widget.food.price + ' DA',
-                    style: TextStyle(
-                      color: AppColors.colorPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: ListTile(
+          title: Text(
+            widget.food.name,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(widget.food.info),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Text(
+                  widget.food.price + ' DA',
+                  style: TextStyle(
+                    color: AppColors.colorPrimary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

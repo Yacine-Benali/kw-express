@@ -106,11 +106,11 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
   }
 
   Widget _buildList(List<Food> list) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        if (index == list.length - 1) {
-          return Column(
+    List<Widget> fuckYou = List();
+    for (int index = 0; index < list.length; index++) {
+      if (index == list.length - 1) {
+        fuckYou.add(
+          Column(
             children: [
               FoodTileWidget(
                 food: list[index],
@@ -120,13 +120,17 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                 height: 80,
               ),
             ],
-          );
-        }
-        return FoodTileWidget(
+          ),
+        );
+      } else {
+        fuckYou.add(FoodTileWidget(
           food: list[index],
           onSelected: (f) => addToCart(f),
-        );
-      },
+        ));
+      }
+    }
+    return ListView(
+      children: fuckYou,
     );
   }
 
