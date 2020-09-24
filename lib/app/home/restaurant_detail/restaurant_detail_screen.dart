@@ -139,9 +139,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
             FutureBuilder<List<MenuPage>>(
               future: menuFuture,
               builder: (context, snapshot) {
-                if (snapshot?.hasData) {
+                if (snapshot.hasData) {
                   final List<MenuPage> menuPages = snapshot.data;
-                  print(menuPages.length);
                   if (menuPages.isNotEmpty) {
                     _tabController = TabController(
                       initialIndex: 0,
@@ -276,110 +275,104 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                       ),
                     );
                   }
-                } else {
-                  double width = SizeConfig.screenWidth / 3 - 8;
-                  _tabController = TabController(
-                    initialIndex: 0,
-                    vsync: this,
-                    length: 4,
-                  );
-                  List<String> emptyUrls = [''];
-                  return Scaffold(
-                    backgroundColor: Colors.white,
-                    body: IgnorePointer(
-                      child: Column(
-                        children: <Widget>[
-                          RestaurantHeaderWidget(
-                            restaurant: widget.restaurant,
-                            imageCover: widget.imageCover,
-                            imageProfile: widget.imageProfile,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Shimmer.fromColors(
-                              period: Duration(milliseconds: 500),
-                              baseColor: Colors.grey[200],
-                              highlightColor: Colors.red[100],
-                              child: TabBar(
-                                labelPadding:
-                                    EdgeInsets.only(left: 4, right: 4),
-                                isScrollable: true,
-                                controller: _tabController,
-                                unselectedLabelColor: Colors.black,
-                                labelColor: AppColors.colorPrimary,
-                                labelStyle: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                tabs: [
-                                  Tab(
-                                    child: Container(
-                                      width: width,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: Colors.blue, width: 1)),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Container(
-                                      width: width,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: Colors.blue, width: 1)),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Container(
-                                      width: width,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: Colors.blue, width: 1)),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Container(
-                                      width: width,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: Colors.blue, width: 1)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: TabBarView(
+                }
+                double width = SizeConfig.screenWidth / 3 - 8;
+                _tabController = TabController(
+                  initialIndex: 0,
+                  vsync: this,
+                  length: 4,
+                );
+                List<String> emptyUrls = [''];
+                return Scaffold(
+                  backgroundColor: Colors.white,
+                  body: IgnorePointer(
+                    child: Column(
+                      children: <Widget>[
+                        RestaurantHeaderWidget(
+                          restaurant: widget.restaurant,
+                          imageCover: widget.imageCover,
+                          imageProfile: widget.imageProfile,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                          child: Shimmer.fromColors(
+                            period: Duration(milliseconds: 500),
+                            baseColor: Colors.grey[200],
+                            highlightColor: Colors.red[100],
+                            child: TabBar(
+                              labelPadding: EdgeInsets.only(left: 4, right: 4),
+                              isScrollable: true,
                               controller: _tabController,
-                              children: [
-                                Tab(child: Text('')),
-                                Tab(child: Text('')),
-                                Tab(child: Text('')),
-                                Tab(child: Text('')),
+                              unselectedLabelColor: Colors.black,
+                              labelColor: AppColors.colorPrimary,
+                              labelStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              tabs: [
+                                Tab(
+                                  child: Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Colors.blue, width: 1)),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Colors.blue, width: 1)),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Colors.blue, width: 1)),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Colors.blue, width: 1)),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              Tab(child: Text('')),
+                              Tab(child: Text('')),
+                              Tab(child: Text('')),
+                              Tab(child: Text('')),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                }
+                  ),
+                );
               },
             ),
             Padding(

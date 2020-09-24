@@ -355,7 +355,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
       padding: widget.listPadding,
       child: StaggeredGridView.countBuilder(
         crossAxisCount: widget.crossAxisCount,
-        itemCount: items.length,
+        itemCount: items.length + 1,
         shrinkWrap: widget.shrinkWrap,
         staggeredTileBuilder:
             widget.indexedScaledTileBuilder ?? (int index) => ScaledTile.fit(1),
@@ -445,7 +445,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
               ),
             );
           }
-          return builder(items[index], index);
+          return builder(items[index - 1], index - 1);
         },
       ),
     );
