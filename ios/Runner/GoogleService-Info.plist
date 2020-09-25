@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>23490928985-oo57obrlmhvod3n8cl1f0qojf9el3jbo.apps.googleusercontent.com</string>
+	<string>23490928985-0qrmtn9a9fo0n51fb5j9felcr39a2pqc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.23490928985-oo57obrlmhvod3n8cl1f0qojf9el3jbo</string>
+	<string>com.googleusercontent.apps.23490928985-0qrmtn9a9fo0n51fb5j9felcr39a2pqc</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>23490928985-ksjldn20c9fh3fc3brmbcvu9bsdf77dn.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.kwexpress.app.ios</string>
+	<string>com.kwexpress.app.ios2</string>
 	<key>PROJECT_ID</key>
 	<string>kwexpressv1</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:23490928985:ios:61b0e36aca8ab339ecec48</string>
+	<string>1:23490928985:ios:ff59b6c282fe4021ecec48</string>
 	<key>DATABASE_URL</key>
 	<string>https://kwexpressv1.firebaseio.com</string>
 </dict>

@@ -31,7 +31,7 @@ class RestaurantDetailBloc {
     }
     final List<List<Food>> foods = await Future.wait(foodsFuture);
     // foods = listlistfoods.expand((x) => x).toList();
-    //print('api response executed in ${stopwatch.elapsed}');
+    print('api response executed in ${stopwatch.elapsed}');
     for (int i = 0; i < headersList.length; i++) {
       for (Food food in foods[i]) food.header = headersList[i];
 
