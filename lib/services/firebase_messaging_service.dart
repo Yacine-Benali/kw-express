@@ -44,21 +44,24 @@ class FirebaseMessagingService {
     configLocalNotification();
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (i % 2 == 0) {
-          // print("onMessage called: $message");
-          showNotification(message);
+        print("onMessage: $message");
+        // if (i % 2 == 0) {
+        // print("onMessage called: $message");
+        showNotification(message);
 
-          // something else you wanna execute
-        }
-        i++;
-        return;
+        // something else you wanna execute
+        // }
+        // i++;
+        // return;
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        showNotification(message);
       },
       //onBackgroundMessage: showNotification,
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        showNotification(message);
       },
     );
 
@@ -75,19 +78,17 @@ class FirebaseMessagingService {
     });
 
     _firebaseMessaging.getToken().then((String newToken) {
-      // print('************user token*************');
-      // print(newToken);
+      print('************user token*************');
+      print(newToken);
     });
   }
 
   Future<void> showNotification(Map<String, dynamic> message) async {
     int id = Random().nextInt(1000);
     print('called with $id');
-    print(message);
+    //print(message);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      Platform.isAndroid
-          ? 'com.kwexpress.b1_parent'
-          : 'com.benalitechnologies.b1_parent',
+      Platform.isAndroid ? 'com.kwexpress.app' : 'com.kwexpress.app.ios2',
       'KW express',
       'your channel description',
       playSound: true,
