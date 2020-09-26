@@ -29,9 +29,11 @@ class RestaurantDetailBloc {
     return this.urls;
   }
 
-  Future<List<Food>> fetchFoods(RestaurantMenuHeader header) {
+  Future<List<Food>> fetchFoods(RestaurantMenuHeader header) async {
     try {
-      return apiService.fetchMenu(restaurant.id, header.id);
+      List<Food> foods = await apiService.fetchMenu(restaurant.id, header.id);
+      foods.forEach((element) => element.header = header);
+      return foods;
     } on Exception catch (e) {
       print(e);
     }

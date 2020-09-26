@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:kwexpress/app/home/favorite_restaurants/favorite_restaurants_screen.dart';
+import 'package:kwexpress/app/home/home_screen_bloc.dart';
 import 'package:kwexpress/app/home/offers/offer_screen.dart';
 import 'package:kwexpress/app/home/restaurants/restaurants_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
@@ -9,7 +8,6 @@ import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/firebase_messaging_service.dart';
-import 'package:kwexpress/services/location_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
@@ -35,28 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Restaurant> restaurantsList;
   List<String> specialOffer;
   SharedPreferences sharedPrefrences;
-
-  Future<void> getCurrentLocation() async {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-    LocationService locationService = LocationService();
-
-    try {
-      Position position = await geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-      locationService.position = position;
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg:
-            "L'application K&W Express a besoin de cette permission pour son bon fonctionnement",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    }
-  }
+  HomeScreenBloc bloc;
 
   @override
   void initState() {
@@ -64,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
         FirebaseMessagingService();
     firebaseMessagingService.configFirebaseNotification();
 
-    getCurrentLocation();
     Tuple2<List<Restaurant>, List<String>> t = widget.apiResponse;
     restaurantsList = t.item1;
     specialOffer = t.item2;

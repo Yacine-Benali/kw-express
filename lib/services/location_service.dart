@@ -1,5 +1,3 @@
-import 'package:geolocator/geolocator.dart';
-
 class LocationService {
   static final LocationService _locationService = LocationService._internal();
 
@@ -9,12 +7,9 @@ class LocationService {
 
   LocationService._internal();
 
-  Position position;
+  // Position position;
 
   String getGoogleMapsUrl() {
-    if (position == null)
-      return 'position unavailable';
-    else
-      return "https://www.google.com/maps/search/?api=1&query=${position.longitude},${position.latitude}";
+    return "https://www.google.com/maps/search/?api=1&query=0,0";
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kwexpress/app/home/home_screen.dart';
 import 'package:kwexpress/app/home/home_screen_bloc.dart';
 import 'package:kwexpress/app/home/splash_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/auth.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
@@ -21,6 +23,22 @@ class _LandingPageState extends State<LandingPage> {
   HomeScreenBloc bloc;
   Future<SharedPreferences> sharedPrefrencesFuture;
   Future<Tuple2<List<Restaurant>, List<String>>> restaurantsListFuture;
+  Future<void> getCurrentLocation() async {
+    try {
+      LocationData locationData = await bloc.getUserPosition();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg:
+            "L'application K&W Express a besoin de cette permission pour son bon fonctionnement",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -29,7 +47,7 @@ class _LandingPageState extends State<LandingPage> {
     bloc = HomeScreenBloc(apiService: api);
     restaurantsListFuture = bloc.fetchRestaurants();
     auth = Provider.of<Auth>(context, listen: false);
-
+    getCurrentLocation();
     super.initState();
   }
 
