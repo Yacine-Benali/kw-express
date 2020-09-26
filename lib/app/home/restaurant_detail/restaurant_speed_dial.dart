@@ -258,6 +258,7 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
+              backgroundColor: AppColors.colorPrimary,
               heroTag: null,
               child: Icon(CustomIcons.order),
               onPressed: () {

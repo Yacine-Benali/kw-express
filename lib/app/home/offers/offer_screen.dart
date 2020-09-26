@@ -40,6 +40,7 @@ class _OfferScreenState extends State<OfferScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       return showDialog(
+        barrierDismissible: true,
         context: context,
         builder: (_) => ImageDialog(
           imageProvider: image,
@@ -70,28 +71,20 @@ class _OfferScreenState extends State<OfferScreen> {
         // print(items[index]);
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: 400,
-            width: 400,
-            child: Card(
-              elevation: 6,
-              margin: EdgeInsets.all(0),
-              child: CachedNetworkImage(
-                imageUrl: items[index],
-                placeholder: (context, url) => SizedBox(
-                  child: restoOffre,
-                ),
-                errorWidget: (_, __, ___) => SizedBox(
-                  child: restoOffre,
-                ),
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+          child: Card(
+            elevation: 6,
+            margin: EdgeInsets.all(0),
+            child: CachedNetworkImage(
+              imageUrl: items[index],
+              placeholder: (context, url) => SizedBox(
+                height: 400,
+                width: 400,
+                child: restoOffre,
+              ),
+              errorWidget: (_, __, ___) => SizedBox(
+                height: 400,
+                width: 400,
+                child: restoOffre,
               ),
             ),
           ),
@@ -108,13 +101,28 @@ class ImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: SizedBox(
-        // height: SizeConfig.screenHeight - 200,
-        // width: SizeConfig.screenWidth - 80,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: imageProvider,
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
+            imageProvider,
+          ],
         ),
       ),
     );
