@@ -82,24 +82,26 @@ class APIService {
     String url = api.endpointUri(Endpoint.menu).toString();
     final params = {'Resto': restoId, 'Speciality': headerId};
 
-    final response = await http.post(
-      url,
-      body: params,
-    );
+    try {
+      final response = await http.post(
+        url,
+        body: params,
+      );
 
-    if (response.statusCode == 200) {
-      final LinkedHashMap<String, dynamic> decodedReponse =
-          json.decode(response.body);
-      ;
-      final List<dynamic> dataList = decodedReponse['data'];
-      if (dataList.isNotEmpty) {
-        final List<Food> list =
-            dataList.map((data) => Food.fromMap(data)).toList();
-        if (list != null) return list;
+      if (response.statusCode == 200) {
+        final LinkedHashMap<String, dynamic> decodedReponse =
+            json.decode(response.body);
+        ;
+        final List<dynamic> dataList = decodedReponse['data'];
+        if (dataList.isNotEmpty) {
+          final List<Food> list =
+              dataList.map((data) => Food.fromMap(data)).toList();
+          if (list != null) return list;
+        }
       }
+    } on Exception catch (e) {
+      throw e;
     }
-
-    throw response;
   }
 
   Future<void> updateVue(String restoId) async {

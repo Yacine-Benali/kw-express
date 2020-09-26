@@ -89,7 +89,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 children: [
                   Text('Frais de livraison', style: style2),
                   Text(
-                    'A partit de ${Constants.deliveryPrice} DA',
+                    'A partir de ${Constants.deliveryPrice} DA',
                     style: style2,
                   ),
                 ],

@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       Fluttertoast.showToast(
         msg:
-            "L'application K&W Express a besoin de cette permission pour son bon foncionnement",
+            "L'application K&W Express a besoin de cette permission pour son bon fonctionnement",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,

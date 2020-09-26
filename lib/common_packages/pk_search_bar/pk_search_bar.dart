@@ -351,7 +351,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
   Widget _buildListView(
       List<T> items, Widget Function(T item, int index) builder) {
     final widthMax = MediaQuery.of(context).size.width;
-    print(items.length);
+
     return Padding(
       padding: widget.listPadding,
       child: StaggeredGridView.countBuilder(

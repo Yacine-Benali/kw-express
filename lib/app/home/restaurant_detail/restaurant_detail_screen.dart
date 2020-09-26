@@ -6,8 +6,8 @@ import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_header_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_speed_dial.dart';
 import 'package:kwexpress/app/models/food.dart';
-import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
+import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
@@ -40,7 +40,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
   RestaurantDetailBloc bloc;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Future<List<MenuPage>> menuFuture;
+  Future<List<RestaurantMenuHeader>> menuFuture;
   List<Food> cartFoodList;
   bool showCart;
   TabController _tabController;
@@ -49,7 +49,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
   void initState() {
     APIService api = Provider.of<APIService>(context, listen: false);
     bloc = RestaurantDetailBloc(apiService: api, restaurant: widget.restaurant);
-    menuFuture = bloc.fetchMenu();
+    menuFuture = bloc.fetchRestaurantHeader();
     cartFoodList = List();
     bloc.updateVue();
     showCart = false;
@@ -82,25 +82,85 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     cartFoodList.add(food);
   }
 
-  List<Widget> getTabBar(List<MenuPage> list) {
+  List<Widget> getTabBar(List<RestaurantMenuHeader> list) {
     List<Widget> tabBarList = List(list.length);
     for (int i = 0; i < list.length; i++) {
       tabBarList[i] = Tab(
           child: Container(
         alignment: Alignment.center,
         child: Text(
-          '    ' + list.elementAt(i).header.name + '    ',
+          '    ' + list.elementAt(i).name + '    ',
         ),
       ));
     }
     return tabBarList;
   }
 
-  List<Widget> getTabBarView(List<MenuPage> list) {
+  List<Widget> getTabBarView(List<RestaurantMenuHeader> list) {
     List<Widget> tabBarViewList = List(list.length);
 
     for (int i = 0; i < list.length; i++) {
-      tabBarViewList[i] = _buildList(list.elementAt(i).foods);
+      tabBarViewList[i] = FutureBuilder<List<Food>>(
+        future: bloc.fetchFoods(list.elementAt(i)),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<Food> foods = snapshot.data;
+            if (foods.isNotEmpty) {
+              _tabController = TabController(
+                initialIndex: 0,
+                vsync: this,
+                length: foods.length,
+              );
+              return _buildList(foods);
+            } else
+              return Container();
+          }
+          return ListView.builder(
+            itemBuilder: (_, __) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                child: Shimmer.fromColors(
+                  period: Duration(milliseconds: 500),
+                  baseColor: Colors.grey[200],
+                  highlightColor: Colors.red[100],
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 8.0, left: 16, bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: SizeConfig.safeBlockHorizontal * 50,
+                          height: 10.0,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Container(
+                            width: SizeConfig.safeBlockHorizontal * 40,
+                            height: 10.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Container(
+                            width: SizeConfig.safeBlockHorizontal * 20,
+                            height: 10.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            itemCount: 6,
+          );
+        },
+      );
     }
     return tabBarViewList;
   }
@@ -129,9 +189,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
         ));
       }
     }
-    return ListView(
-      children: fuckYou,
-    );
+    return ListView(children: fuckYou);
   }
 
   @override
@@ -140,16 +198,17 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
       child: Material(
         child: Stack(
           children: [
-            FutureBuilder<List<MenuPage>>(
+            FutureBuilder<List<RestaurantMenuHeader>>(
               future: menuFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  final List<MenuPage> menuPages = snapshot.data;
-                  if (menuPages.isNotEmpty) {
+                  final List<RestaurantMenuHeader> restaurantHeadersList =
+                      snapshot.data;
+                  if (restaurantHeadersList.isNotEmpty) {
                     _tabController = TabController(
                       initialIndex: 0,
                       vsync: this,
-                      length: menuPages.length,
+                      length: restaurantHeadersList.length,
                     );
                     return WillPopScope(
                       onWillPop: () async {
@@ -260,7 +319,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                                           fontWeight: FontWeight.bold,
                                         ),
                                         indicatorSize: TabBarIndicatorSize.tab,
-                                        tabs: getTabBar(menuPages),
+                                        tabs: getTabBar(restaurantHeadersList),
                                       ),
                                     ),
                                   ],
@@ -271,7 +330,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                               flex: 1,
                               child: TabBarView(
                                 controller: _tabController,
-                                children: getTabBarView(menuPages),
+                                children: getTabBarView(restaurantHeadersList),
                               ),
                             ),
                           ],

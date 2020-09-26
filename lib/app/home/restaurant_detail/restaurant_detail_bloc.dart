@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:kwexpress/app/models/food.dart';
-import 'package:kwexpress/app/models/menu_page.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api_service.dart';
@@ -16,34 +15,26 @@ class RestaurantDetailBloc {
   final APIService apiService;
   List<String> urls;
 
-  Future<List<MenuPage>> fetchMenu() async {
-    final Tuple2<List<RestaurantMenuHeader>, List<String>> t1 =
-        await apiService.fetchRestaurantDetail(restaurant.id);
-    List<RestaurantMenuHeader> headersList = t1.item1;
-    List<String> urlsList = t1.item2;
-    this.urls = urlsList;
-    List<MenuPage> menuPages = List();
-    List<Future<List<Food>>> foodsFuture = List();
-    //print('start');
-    Stopwatch stopwatch = Stopwatch()..start();
-    for (RestaurantMenuHeader header in headersList) {
-      foodsFuture.add(apiService.fetchMenu(restaurant.id, header.id));
+  Future<List<RestaurantMenuHeader>> fetchRestaurantHeader() async {
+    try {
+      final Tuple2<List<RestaurantMenuHeader>, List<String>> t1 =
+          await apiService.fetchRestaurantDetail(restaurant.id);
+      return t1.item1;
+    } on Exception catch (e) {
+      print(e);
     }
-    final List<List<Food>> foods = await Future.wait(foodsFuture);
-    // foods = listlistfoods.expand((x) => x).toList();
-    print('api response executed in ${stopwatch.elapsed}');
-    for (int i = 0; i < headersList.length; i++) {
-      for (Food food in foods[i]) food.header = headersList[i];
-
-      menuPages.add(MenuPage(header: headersList[i], foods: foods[i]));
-    }
-    //print('bloc done executed in ${stopwatch.elapsed}');
-
-    return menuPages;
   }
 
-  List<String> getUrls() {
+  List<String> getUrls(RestaurantMenuHeader header) {
     return this.urls;
+  }
+
+  Future<List<Food>> fetchFoods(RestaurantMenuHeader header) {
+    try {
+      return apiService.fetchMenu(restaurant.id, header.id);
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   List<Tuple2<Food, int>> getSortedOrder(List<Food> cartFoodList) {
