@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/constants/app_colors.dart';
@@ -119,6 +121,33 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  void sendMessage() async {
+    try {
+      String message =
+          await widget.bloc.createMessage(sortedOrder, fullOrderPrice);
+      List<String> recipents = [Constants.phoneNumer1, Constants.phoneNumber2];
+      // print(message);
+      String _result = await sendSMS(message: message, recipients: recipents)
+          .catchError((onError) {
+        print(onError);
+      });
+    } on Exception catch (e) {
+      String text =
+          "L'application K&W Express a besoin de cette permission pour son bon fonctionnement";
+      if (e is PlatformException) text = e.message;
+
+      Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
+
   Widget buildButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -129,21 +158,7 @@ class _OrderScreenState extends State<OrderScreen> {
             borderRadius: BorderRadius.circular(25.0),
             side: BorderSide(color: AppColors.colorPrimary),
           ),
-          onPressed: () async {
-            String message =
-                widget.bloc.createMessage(sortedOrder, fullOrderPrice);
-            List<String> recipents = [
-              Constants.phoneNumer1,
-              Constants.phoneNumber2
-            ];
-            print(message);
-            String _result =
-                await sendSMS(message: message, recipients: recipents)
-                    .catchError((onError) {
-              print(onError);
-            });
-            print(_result);
-          },
+          onPressed: () => sendMessage(),
           color: AppColors.colorPrimary,
           textColor: Colors.white,
           child: Text(

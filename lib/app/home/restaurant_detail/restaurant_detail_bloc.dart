@@ -4,6 +4,7 @@ import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/location_service.dart';
+import 'package:location/location.dart';
 import 'package:tuple/tuple.dart';
 
 class RestaurantDetailBloc {
@@ -70,32 +71,40 @@ class RestaurantDetailBloc {
     return foodPrice;
   }
 
-  String createMessage(List<Tuple2<Food, int>> sortedOrder, int fullPrice) {
-    LocationService locationService = LocationService();
-    String restaurant = 'Restaurant:' + this.restaurant.name;
-    String userLocation = locationService.getGoogleMapsUrl();
-    String delivery = 'Livraison: \n' + userLocation ?? 'not available';
-    String sfullPrice = 'Somme: ' + fullPrice.toString() + ' DA';
+  Future<String> createMessage(
+      List<Tuple2<Food, int>> sortedOrder, int fullPrice) async {
+    try {
+      LocationService locationService = LocationService();
 
-    String foodDescription = '';
-    for (Tuple2<Food, int> tuple in sortedOrder) {
-      Food food = tuple.item1;
-      int repetition = tuple.item2;
-      String temp =
-          repetition.toString() + ' * ${food.header.name} - ${food.name}';
-      foodDescription = foodDescription + temp + '\n';
+      LocationData locationData = await locationService.getUserPosition();
+      //print(locationData.latitude);
+      String userLocation = locationService.getGoogleMapsUrl(locationData);
+      String restaurant = 'Restaurant:' + this.restaurant.name;
+      String delivery = 'Livraison: \n' + userLocation ?? 'not available';
+      String sfullPrice = 'Somme: ' + fullPrice.toString() + ' DA';
+
+      String foodDescription = '';
+      for (Tuple2<Food, int> tuple in sortedOrder) {
+        Food food = tuple.item1;
+        int repetition = tuple.item2;
+        String temp =
+            repetition.toString() + ' * ${food.header.name} - ${food.name}';
+        foodDescription = foodDescription + temp + '\n';
+      }
+
+      String orderMessage = restaurant +
+          '\n\n' +
+          delivery +
+          '\n\n' +
+          sfullPrice +
+          '\n\n' +
+          foodDescription +
+          '\n';
+
+      return orderMessage;
+    } catch (e) {
+      rethrow;
     }
-
-    String orderMessage = restaurant +
-        '\n\n' +
-        delivery +
-        '\n\n' +
-        sfullPrice +
-        '\n\n' +
-        foodDescription +
-        '\n';
-
-    return orderMessage;
   }
 
   Future<void> updateVue() async {
