@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_siren/flutter_siren.dart';
 import 'package:kwexpress/app/home/home_screen.dart';
 import 'package:kwexpress/app/home/home_screen_bloc.dart';
 import 'package:kwexpress/app/home/splash_screen.dart';
@@ -10,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
+import '../common_packages/flutter_siren-master/flutter_siren.dart';
 import 'sign_in/phone_number/phone_number_sign_in_page.dart';
 
 class LandingPage extends StatefulWidget {
