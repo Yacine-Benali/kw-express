@@ -2,10 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
-import 'package:kwexpress/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:tuple/tuple.dart';
@@ -136,21 +134,34 @@ class _OrderScreenState extends State<OrderScreen> {
       String text =
           "L'application K&W Express a besoin de cette permission pour son bon fonctionnement";
       if (e is PlatformException) text = e.message;
-
-      await PlatformExceptionAlertDialog(
-        title: 'Erreur',
-        exception: e,
-      ).show(context);
-      // Fluttertoast.showToast(
-      //   msg: text,
-      //   toastLength: Toast.LENGTH_LONG,
-      //   gravity: ToastGravity.BOTTOM,
-      //   timeInSecForIosWeb: 1,
-      //   backgroundColor: Colors.grey,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // );
+      showError('Erreur', text);
     }
+  }
+
+  Future<void> showError(String title, String message) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              FlatButton(
+                child: Text('Activer'),
+                onPressed: () async {
+                  try {
+                    await widget.bloc
+                        .createMessage(sortedOrder, fullOrderPrice);
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 
   Widget buildButton() {

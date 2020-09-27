@@ -22,7 +22,7 @@ class LocationService {
         throw PlatformException(
           code: '1',
           message:
-              "vous avez refusé d'autoriser l'accès GPS à cette application, mais vous devez l'activer pour passer une commande",
+              "veuillez activer votre GPS pour pouvoir passer votre commande",
         );
       }
     }
@@ -41,7 +41,7 @@ class LocationService {
         throw PlatformException(
           code: '1',
           message:
-              "vous avez refusé d'autoriser l'accès GPS à cette application, mais vous devez l'activer pour passer une commande",
+              "veuillez activer votre GPS pour pouvoir passer votre commande",
         );
       }
     }
