@@ -174,7 +174,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
             children: [
               FoodTileWidget(
                 food: list[index],
-                onSelected: (t) {},
+                onSelected: (f) => addToCart(f),
               ),
               SizedBox(
                 height: 80,
