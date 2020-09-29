@@ -36,6 +36,7 @@ dependencies:
   location: ^3.0.2
   package_info: ^0.4.3
   #ui
+  #progress_dialog: ^1.2.4
   flutter_svg: ^0.18.0
   cached_network_image: 2.0.0
   carousel_slider: ^2.2.1

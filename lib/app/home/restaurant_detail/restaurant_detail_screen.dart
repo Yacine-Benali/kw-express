@@ -39,7 +39,6 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     with TickerProviderStateMixin {
   RestaurantDetailBloc bloc;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Future<List<RestaurantMenuHeader>> menuFuture;
   List<Food> cartFoodList;
   bool showCart;

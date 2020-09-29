@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
+import 'package:kwexpress/common_widgets/progress_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:tuple/tuple.dart';
@@ -28,6 +29,7 @@ class _OrderScreenState extends State<OrderScreen> {
   List<Tuple2<Food, int>> sortedOrder;
   int foodPrice;
   int fullOrderPrice;
+  ProgressDialog pr;
 
   @override
   void initState() {
@@ -36,7 +38,18 @@ class _OrderScreenState extends State<OrderScreen> {
     sortedOrder = widget.bloc.getSortedOrder(widget.cartFoodList);
     foodPrice = widget.bloc.calculateFoodPrice(widget.cartFoodList);
     fullOrderPrice = foodPrice + Constants.deliveryPrice;
-    //print(widget.cartFoodList.length);
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+    pr.style(
+      message: 'Chargement',
+      messageTextStyle: TextStyle(fontSize: 12),
+      progressWidget: Container(
+        child: CircularProgressIndicator(),
+      ),
+    );
     super.initState();
   }
 
@@ -121,16 +134,17 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void sendMessage() async {
+    await pr.show();
     try {
       String message =
           await widget.bloc.createMessage(sortedOrder, fullOrderPrice);
       List<String> recipents = [Constants.phoneNumer1, Constants.phoneNumber2];
-      // print(message);
+      await pr.hide();
+
       String _result = await sendSMS(message: message, recipients: recipents)
-          .catchError((onError) {
-        print(onError);
-      });
+          .catchError((onError) {});
     } on Exception catch (e) {
+      await pr.hide();
       String text =
           "L'application K&W Express a besoin de cette permission pour son bon fonctionnement";
       if (e is PlatformException) text = e.message;

@@ -5,6 +5,8 @@ import 'package:kwexpress/app/home/splash_screen.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/services/api_service.dart';
 import 'package:kwexpress/services/auth.dart';
+import 'package:kwexpress/services/location_service.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
@@ -18,14 +20,17 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  LocationService locationService = LocationService();
   Auth auth;
   HomeScreenBloc bloc;
   Future<SharedPreferences> sharedPrefrencesFuture;
   Future<Tuple2<List<Restaurant>, List<String>>> restaurantsListFuture;
   Siren siren;
+  Future<LocationData> locationDataFuture;
   Future<bool> isUpdateAvailbaleFuture;
   @override
   void initState() {
+    locationDataFuture = locationService.getUserPosition();
     APIService api = Provider.of<APIService>(context, listen: false);
     sharedPrefrencesFuture = SharedPreferences.getInstance();
     bloc = HomeScreenBloc(apiService: api);
@@ -57,7 +62,11 @@ class _LandingPageState extends State<LandingPage> {
       stream: auth.onAuthStateChanged,
       builder: (context, authSnapshot) {
         return FutureBuilder<List<dynamic>>(
-          future: Future.wait([restaurantsListFuture, sharedPrefrencesFuture]),
+          future: Future.wait([
+            restaurantsListFuture,
+            sharedPrefrencesFuture,
+            locationDataFuture,
+          ]),
           builder:
               (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.hasData) {

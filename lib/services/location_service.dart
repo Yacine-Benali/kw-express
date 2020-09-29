@@ -16,7 +16,6 @@ class LocationService {
 
     bool _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
-      print('gps not enabled');
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
         throw PlatformException(
@@ -27,7 +26,6 @@ class LocationService {
       }
     }
     _permissionGranted = await location.hasPermission();
-    print(_permissionGranted);
     if (_permissionGranted == PermissionStatus.deniedForever) {
       print('3lah ah rabak 3lah');
       throw PlatformException(
