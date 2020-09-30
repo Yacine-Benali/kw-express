@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -211,9 +212,10 @@ class _BodyState extends State<_Body> {
 
     final text = Expanded(
       child: _progressDialogType == ProgressDialogType.Normal
-          ? Text(
+          ? AutoSizeText(
               _dialogMessage,
               textAlign: _textAlign,
+              maxLines: 1,
               style: _messageStyle,
               textDirection: _direction,
             )
@@ -226,9 +228,10 @@ class _BodyState extends State<_Body> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                          child: Text(
+                          child: AutoSizeText(
                         _dialogMessage,
                         style: _messageStyle,
+                        maxLines: 1,
                         textDirection: _direction,
                       )),
                     ],
@@ -236,10 +239,11 @@ class _BodyState extends State<_Body> {
                   SizedBox(height: 4.0),
                   Align(
                     alignment: Alignment.bottomRight,
-                    child: Text(
+                    child: AutoSizeText(
                       "$_progress/$_maxProgress",
                       style: _progressTextStyle,
                       textDirection: _direction,
+                      maxLines: 1,
                     ),
                   ),
                 ],
