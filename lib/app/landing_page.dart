@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kwexpress/app/home/home_screen.dart';
 import 'package:kwexpress/app/home/home_screen_bloc.dart';
@@ -30,7 +32,11 @@ class _LandingPageState extends State<LandingPage> {
   Future<bool> isUpdateAvailbaleFuture;
   @override
   void initState() {
-    locationDataFuture = locationService.getUserPosition();
+    if (Platform.isAndroid) {
+      locationDataFuture = locationService.getUserPosition();
+    } else {
+      locationDataFuture = Future.delayed(Duration(milliseconds: 500));
+    }
     APIService api = Provider.of<APIService>(context, listen: false);
     sharedPrefrencesFuture = SharedPreferences.getInstance();
     bloc = HomeScreenBloc(apiService: api);
@@ -56,6 +62,18 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
   }
 
+  void newFuture() {
+    print("snapshot has error retrying");
+    if (Platform.isAndroid) {
+      locationDataFuture = locationService.getUserPosition();
+    } else {
+      locationDataFuture = Future.delayed(Duration(milliseconds: 500));
+    }
+    sharedPrefrencesFuture = SharedPreferences.getInstance();
+    restaurantsListFuture = bloc.fetchRestaurants();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<AuthUser>(
@@ -69,6 +87,7 @@ class _LandingPageState extends State<LandingPage> {
           ]),
           builder:
               (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            print(snapshot);
             if (snapshot.hasData) {
               if (authSnapshot.connectionState == ConnectionState.active) {
                 AuthUser user = authSnapshot.data;
@@ -87,6 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                 );
               }
             }
+            if (snapshot.hasError) newFuture();
             return SplashScreen();
           },
         );
