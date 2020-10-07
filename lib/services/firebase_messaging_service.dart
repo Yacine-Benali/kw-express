@@ -76,11 +76,11 @@ class FirebaseMessagingService {
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
-
-    _firebaseMessaging.getToken().then((String newToken) {
-      print('************user token*************');
-      print(newToken);
-    });
+    // no need to get tokens
+    // _firebaseMessaging.getToken().then((String newToken) {
+    //   print('************user token*************');
+    //   print(newToken);
+    // });
   }
 
   Future<void> showNotification(Map<String, dynamic> message) async {

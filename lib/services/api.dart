@@ -11,7 +11,7 @@ class API {
   static final String host = 'fahemnydz.000webhostapp.com';
 
   Uri endpointUri(Endpoint endpoint) => Uri(
-        scheme: 'https',
+        scheme: 'http',
         host: host,
         path: _paths[endpoint],
       );

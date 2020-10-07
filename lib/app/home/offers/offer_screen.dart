@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,15 +40,17 @@ class _OfferScreenState extends State<OfferScreen> {
       imageUrl: url,
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      return showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (_) => ImageDialog(
-          imageProvider: image,
-        ),
-      );
-    });
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        return showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (_) => ImageDialog(
+            imageProvider: image,
+          ),
+        );
+      });
+    }
     super.initState();
   }
 

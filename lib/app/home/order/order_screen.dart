@@ -2,8 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
+import 'package:kwexpress/app/home/order/order_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
+import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/common_widgets/progress_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/constants.dart';
@@ -11,12 +12,12 @@ import 'package:tuple/tuple.dart';
 
 class OrderScreen extends StatefulWidget {
   final List<Food> cartFoodList;
-  final RestaurantDetailBloc bloc;
+  final Restaurant restaurant;
 
   const OrderScreen({
     Key key,
     @required this.cartFoodList,
-    @required this.bloc,
+    @required this.restaurant,
   }) : super(key: key);
   @override
   _OrderScreenState createState() => _OrderScreenState();
@@ -30,13 +31,15 @@ class _OrderScreenState extends State<OrderScreen> {
   int foodPrice;
   int fullOrderPrice;
   ProgressDialog pr;
+  OrderBloc bloc;
 
   @override
   void initState() {
     cartFoodList = List();
+    bloc = OrderBloc(restaurant: widget.restaurant);
     cartFoodList.addAll(widget.cartFoodList);
-    sortedOrder = widget.bloc.getSortedOrder(widget.cartFoodList);
-    foodPrice = widget.bloc.calculateFoodPrice(widget.cartFoodList);
+    sortedOrder = bloc.getSortedOrder(widget.cartFoodList);
+    foodPrice = bloc.calculateFoodPrice(widget.cartFoodList);
     fullOrderPrice = foodPrice + Constants.deliveryPrice;
     pr = ProgressDialog(
       context,
@@ -65,8 +68,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
     cartFoodList.clear();
     cartFoodList.addAll(temp);
-    sortedOrder = widget.bloc.getSortedOrder(cartFoodList);
-    foodPrice = widget.bloc.calculateFoodPrice(cartFoodList);
+    sortedOrder = bloc.getSortedOrder(cartFoodList);
+    foodPrice = bloc.calculateFoodPrice(cartFoodList);
     fullOrderPrice = foodPrice + Constants.deliveryPrice;
     setState(() {});
   }
@@ -136,8 +139,7 @@ class _OrderScreenState extends State<OrderScreen> {
   void sendMessage() async {
     await pr.show();
     try {
-      String message =
-          await widget.bloc.createMessage(sortedOrder, fullOrderPrice);
+      String message = await bloc.createMessage(sortedOrder, fullOrderPrice);
       List<String> recipents = [Constants.phoneNumer1, Constants.phoneNumber2];
       await pr.hide();
 
@@ -165,8 +167,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: Text('Activer'),
                 onPressed: () async {
                   try {
-                    await widget.bloc
-                        .createMessage(sortedOrder, fullOrderPrice);
+                    await bloc.createMessage(sortedOrder, fullOrderPrice);
                   } catch (e) {
                     print(e);
                   }

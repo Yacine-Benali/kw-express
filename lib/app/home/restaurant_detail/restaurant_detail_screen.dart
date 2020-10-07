@@ -182,7 +182,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                                         MaterialPageRoute(
                                           builder: (context) => OrderScreen(
                                             cartFoodList: cartFoodList,
-                                            bloc: bloc,
+                                            restaurant: widget.restaurant,
                                           ),
                                           fullscreenDialog: true,
                                         ),

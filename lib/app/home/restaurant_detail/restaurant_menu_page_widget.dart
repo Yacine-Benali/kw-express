@@ -37,9 +37,11 @@ class _RestaurantMenuPageWidgetState extends State<RestaurantMenuPageWidget>
     super.initState();
   }
 
-  void newFuture() {
-    // foodsListFuture = widget.bloc.fetchFoods(widget.menuHeader);
-    // setState(() {});
+  void newFuture() async {
+    print('${widget.menuHeader.name} failed to load');
+    await Future.delayed(Duration(seconds: 1));
+    foodsListFuture = widget.bloc.fetchFoods(widget.menuHeader);
+    setState(() {});
   }
 
   @override
@@ -47,6 +49,7 @@ class _RestaurantMenuPageWidgetState extends State<RestaurantMenuPageWidget>
 
   Widget _buildList(List<Food> list) {
     List<Widget> fuckYou = List();
+
     for (int index = 0; index < list.length; index++) {
       if (index == list.length - 1) {
         fuckYou.add(

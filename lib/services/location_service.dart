@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
@@ -28,19 +30,26 @@ class LocationService {
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.deniedForever) {
       print('3lah ah rabak 3lah');
-      throw PlatformException(
-        code: '2',
-        message:
-            "vous avez définitivement refusé à cette application l'accès à votre emplacement, veuillez l'activer dans les paramètres",
-      );
+
+      if (Platform.isAndroid)
+        throw PlatformException(
+          code: '2',
+          message:
+              "vous avez définitivement refusé à cette application l'accès à votre emplacement, veuillez l'activer dans les paramètres",
+        );
+      else
+        return null;
     } else if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        throw PlatformException(
-          code: '1',
-          message:
-              "veuillez activer votre GPS pour pouvoir passer votre commande",
-        );
+        if (Platform.isAndroid)
+          throw PlatformException(
+            code: '1',
+            message:
+                "veuillez activer votre GPS pour pouvoir passer votre commande",
+          );
+        else
+          return null;
       }
     }
     locationData = await location.getLocation();
@@ -49,7 +58,7 @@ class LocationService {
 
   String getGoogleMapsUrl(LocationData locationData) {
     if (locationData == null)
-      return 'position unavailable';
+      return 'position indisponible';
     else
       return "https://www.google.com/maps/search/?api=1&query=${locationData.longitude},${locationData.latitude}";
   }
