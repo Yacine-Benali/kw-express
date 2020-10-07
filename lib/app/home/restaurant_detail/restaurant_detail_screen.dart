@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kwexpress/app/home/restaurant_detail/food_tile_widget.dart';
-import 'package:kwexpress/app/home/restaurant_detail/order_screen.dart';
+import 'package:kwexpress/app/home/order/order_screen.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_detail_bloc.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_header_widget.dart';
+import 'package:kwexpress/app/home/restaurant_detail/restaurant_menu_page_widget.dart';
 import 'package:kwexpress/app/home/restaurant_detail/restaurant_speed_dial.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
@@ -71,6 +71,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
   }
 
   void addToCart(Food food) {
+    print('add to card callback called');
     if (!showCart) setState(() => showCart = !showCart);
     final snackBar = SnackBar(
       content: Text('${food.name} choisi'),
@@ -99,96 +100,14 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
     List<Widget> tabBarViewList = List(list.length);
 
     for (int i = 0; i < list.length; i++) {
-      tabBarViewList[i] = FutureBuilder<List<Food>>(
-        future: bloc.fetchFoods(list.elementAt(i)),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final List<Food> foods = snapshot.data;
-            if (foods.isNotEmpty) {
-              _tabController = TabController(
-                initialIndex: 0,
-                vsync: this,
-                length: foods.length,
-              );
-              return _buildList(foods);
-            } else
-              return Container();
-          }
-          return ListView.builder(
-            itemBuilder: (_, __) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: Shimmer.fromColors(
-                  period: Duration(milliseconds: 500),
-                  baseColor: Colors.grey[200],
-                  highlightColor: Colors.red[100],
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, left: 16, bottom: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: SizeConfig.safeBlockHorizontal * 50,
-                          height: 10.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          child: Container(
-                            width: SizeConfig.safeBlockHorizontal * 40,
-                            height: 10.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          child: Container(
-                            width: SizeConfig.safeBlockHorizontal * 20,
-                            height: 10.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            itemCount: 6,
-          );
-        },
+      tabBarViewList[i] = RestaurantMenuPageWidget(
+        foodsListFuture: bloc.fetchFoods(list.elementAt(i)),
+        bloc: bloc,
+        menuHeader: list.elementAt(i),
+        addToCart: (food) => addToCart(food),
       );
     }
     return tabBarViewList;
-  }
-
-  Widget _buildList(List<Food> list) {
-    List<Widget> fuckYou = List();
-    for (int index = 0; index < list.length; index++) {
-      if (index == list.length - 1) {
-        fuckYou.add(
-          Column(
-            children: [
-              FoodTileWidget(
-                food: list[index],
-                onSelected: (f) => addToCart(f),
-              ),
-              SizedBox(
-                height: 80,
-              ),
-            ],
-          ),
-        );
-      } else {
-        fuckYou.add(FoodTileWidget(
-          food: list[index],
-          onSelected: (f) => addToCart(f),
-        ));
-      }
-    }
-    return ListView(children: fuckYou);
   }
 
   @override
@@ -338,6 +257,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
                     );
                   }
                 }
+                if (snapshot.hasError) newFuture();
                 double width = SizeConfig.screenWidth / 3 - 8;
                 _tabController = TabController(
                   initialIndex: 0,
@@ -488,5 +408,11 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen>
         ),
       ),
     );
+  }
+
+  void newFuture() {
+    print("error fetching restaurant menu retrying...");
+    menuFuture = bloc.fetchRestaurantHeader();
+    setState(() {});
   }
 }

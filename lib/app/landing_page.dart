@@ -87,7 +87,6 @@ class _LandingPageState extends State<LandingPage> {
           ]),
           builder:
               (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-            print(snapshot);
             if (snapshot.hasData) {
               if (authSnapshot.connectionState == ConnectionState.active) {
                 AuthUser user = authSnapshot.data;
