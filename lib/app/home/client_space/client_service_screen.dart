@@ -10,6 +10,7 @@ import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:polygon_clipper/polygon_border.dart';
 import 'package:provider/provider.dart';
 import 'package:kwexpress/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -520,107 +521,134 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 1,
-        title: Text('Service Client', style: TextStyle(color: Colors.grey)),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      CustomIcons.telephone,
-                      color: AppColors.colorPrimary,
-                    ),
-                    title: Text(
-                      'Contact Direct',
-                      style: TextStyle(color: AppColors.textBig, fontSize: 13),
-                    ),
-                    onTap: () => buildContactDirect(),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      CustomIcons.ic_dinner,
-                      color: AppColors.colorPrimary,
-                    ),
-                    title: Text(
-                      'Nouveau Restaurant',
-                      style: TextStyle(color: AppColors.textBig, fontSize: 13),
-                    ),
-                    onTap: () => buildNewRestaurant(),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      CustomIcons.bug,
-                      color: AppColors.colorPrimary,
-                    ),
-                    title: Text(
-                      'Bug',
-                      style: TextStyle(color: AppColors.textBig, fontSize: 13),
-                    ),
-                    onTap: () => buildNewBug(),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      CustomIcons.reclamation,
-                      color: AppColors.colorPrimary,
-                    ),
-                    title: Text(
-                      'Reclamation',
-                      style: TextStyle(color: AppColors.textBig, fontSize: 13),
-                    ),
-                    onTap: () => buildNewClaim(),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      CustomIcons.suggestion,
-                      color: AppColors.colorPrimary,
-                    ),
-                    title: Text(
-                      'Nouveau Restaurant',
-                      style: TextStyle(color: AppColors.textBig, fontSize: 13),
-                    ),
-                    onTap: () => buildNewSuggestion(),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: SizeConfig.screenHeight - (kMinInteractiveDimension * 8),
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'poweredBy',
-                       style: TextStyle(
-                          fontFamily: 'CedarvilleCursive',
+    return Stack(
+      children: [
+        Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 1,
+            title: Text('Service Client', style: TextStyle(color: Colors.grey)),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ListTile(
+                        leading: Icon(
+                          CustomIcons.telephone,
                           color: AppColors.colorPrimary,
                         ),
-                    ),
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: poweredBy,
-                    ),
-                  ],
+                        title: Text(
+                          'Contact Direct',
+                          style:
+                              TextStyle(color: AppColors.textBig, fontSize: 13),
+                        ),
+                        onTap: () => buildContactDirect(),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          CustomIcons.ic_dinner,
+                          color: AppColors.colorPrimary,
+                        ),
+                        title: Text(
+                          'Nouveau Restaurant',
+                          style:
+                              TextStyle(color: AppColors.textBig, fontSize: 13),
+                        ),
+                        onTap: () => buildNewRestaurant(),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          CustomIcons.bug,
+                          color: AppColors.colorPrimary,
+                        ),
+                        title: Text(
+                          'Bug',
+                          style:
+                              TextStyle(color: AppColors.textBig, fontSize: 13),
+                        ),
+                        onTap: () => buildNewBug(),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          CustomIcons.reclamation,
+                          color: AppColors.colorPrimary,
+                        ),
+                        title: Text(
+                          'Reclamation',
+                          style:
+                              TextStyle(color: AppColors.textBig, fontSize: 13),
+                        ),
+                        onTap: () => buildNewClaim(),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          CustomIcons.suggestion,
+                          color: AppColors.colorPrimary,
+                        ),
+                        title: Text(
+                          'Nouveau Restaurant',
+                          style:
+                              TextStyle(color: AppColors.textBig, fontSize: 13),
+                        ),
+                        onTap: () => buildNewSuggestion(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                Container(
+                  height:
+                      SizeConfig.screenHeight - (kMinInteractiveDimension * 8),
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'poweredBy',
+                          style: TextStyle(
+                            fontFamily: 'CedarvilleCursive',
+                            color: AppColors.colorPrimary,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: poweredBy,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+            heroTag: null,
+            shape: PolygonBorder(
+              sides: 8,
+              borderRadius: 5.0, // Default 0.0 degrees
+              rotate: 22.0, // Default 0.0 degrees
+              border: BorderSide.none, // Default BorderSide.none
+            ),
+            child: Icon(Icons.chevron_left),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            backgroundColor: Colors.white.withOpacity(0.1),
+          ),
+        ),
+      ],
     );
   }
 }
