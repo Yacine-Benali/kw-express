@@ -604,9 +604,10 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
                   children: [
                     Text(
                       'poweredBy',
-                      style: GoogleFonts.cedarvilleCursive(
-                        color: AppColors.colorPrimary,
-                      ),
+                       style: TextStyle(
+                          fontFamily: 'CedarvilleCursive',
+                          color: AppColors.colorPrimary,
+                        ),
                     ),
                     SizedBox(
                       width: 100,

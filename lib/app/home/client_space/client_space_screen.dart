@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kwexpress/app/home/client_space/client_service_screen.dart';
 import 'package:kwexpress/app/home/client_space/client_space_bloc.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
@@ -146,7 +146,8 @@ class _ClientSpaceScreenState extends State<ClientSpaceScreen> {
                     children: [
                       Text(
                         'poweredBy',
-                        style: GoogleFonts.cedarvilleCursive(
+                        style: TextStyle(
+                          fontFamily: 'CedarvilleCursive',
                           color: AppColors.colorPrimary,
                         ),
                       ),

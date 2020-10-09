@@ -48,12 +48,12 @@ class _RestaurantMenuPageWidgetState extends State<RestaurantMenuPageWidget>
   bool wantKeepAlive = true;
 
   Widget _buildList(List<Food> list) {
-    List<Widget> fuckYou = List();
-
-    for (int index = 0; index < list.length; index++) {
-      if (index == list.length - 1) {
-        fuckYou.add(
-          Column(
+    // List<Widget> fuckYou = List();
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (_, int index) {
+        if (index == list.length - 1) {
+          return Column(
             children: [
               FoodTileWidget(
                 food: list[index],
@@ -63,16 +63,17 @@ class _RestaurantMenuPageWidgetState extends State<RestaurantMenuPageWidget>
                 height: 80,
               ),
             ],
-          ),
-        );
-      } else {
-        fuckYou.add(FoodTileWidget(
-          food: list[index],
-          onSelected: (f) => widget.addToCart(f),
-        ));
-      }
-    }
-    return ListView(children: fuckYou);
+          );
+        } else {
+          return FoodTileWidget(
+            food: list[index],
+            onSelected: (f) => widget.addToCart(f),
+          );
+        }
+      },
+    );
+    // for (int index = 0; index < list.length; index++) {}
+    // return ListView(children: fuckYou);
   }
 
   @override
