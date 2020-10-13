@@ -38,6 +38,7 @@ class OrderBloc {
           foodDescription +
           '\n';
 
+      print(orderMessage);
       return orderMessage;
     } catch (e) {
       rethrow;

@@ -3,6 +3,7 @@ import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
 import 'package:kwexpress/app/models/restaurant_menu_header.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:retry/retry.dart';
 import 'package:tuple/tuple.dart';
 
 class RestaurantDetailBloc {
@@ -16,8 +17,10 @@ class RestaurantDetailBloc {
 
   Future<List<RestaurantMenuHeader>> fetchRestaurantHeader() async {
     try {
-      final Tuple2<List<RestaurantMenuHeader>, List<String>> t1 =
-          await apiService.fetchRestaurantDetail(restaurant.id);
+      final Tuple2<List<RestaurantMenuHeader>, List<String>> t1 = await retry(
+        () => apiService.fetchRestaurantDetail(restaurant.id),
+        retryIf: (e) => true,
+      );
       return t1.item1;
     } on Exception catch (e) {
       print(e);
@@ -31,7 +34,10 @@ class RestaurantDetailBloc {
   Future<List<Food>> fetchFoods(RestaurantMenuHeader header) async {
     //print('fetching food');
     try {
-      List<Food> foods = await apiService.fetchMenu(restaurant.id, header.id);
+      List<Food> foods = await retry(
+        () => apiService.fetchMenu(restaurant.id, header.id),
+        retryIf: (e) => true,
+      );
       foods?.forEach((element) => element.header = header);
       return foods;
     } on Exception catch (e) {
@@ -46,4 +52,6 @@ class RestaurantDetailBloc {
       print(e);
     }
   }
+
+  String googleToAppleUrl(String googleUrl) {}
 }

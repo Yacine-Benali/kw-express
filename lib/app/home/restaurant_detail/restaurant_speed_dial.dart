@@ -39,19 +39,21 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
   void launchMaps() async {
     String googleUrl = widget.restaurant.location;
     String appleUrl = widget.restaurant.location;
-    try {
-      if (await UrlLauncher.canLaunch("comgooglemaps://")) {
-        print('launching com googleUrl');
-        await UrlLauncher.launch(googleUrl);
-      } else if (await UrlLauncher.canLaunch(appleUrl)) {
-        print('launching apple url');
-        await UrlLauncher.launch(appleUrl);
-      } else {
-        throw 'Could not launch url';
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
+
+    print(googleUrl);
+    // try {
+    //   if (await UrlLauncher.canLaunch("comgooglemaps://")) {
+    //     print('launching com googleUrl');
+    //     await UrlLauncher.launch(googleUrl);
+    //   } else if (await UrlLauncher.canLaunch(appleUrl)) {
+    //     print('launching apple url');
+    //     await UrlLauncher.launch(appleUrl);
+    //   } else {
+    //     throw 'Could not launch url';
+    //   }
+    // } on Exception catch (e) {
+    //   print(e);
+    // }
   }
 
   Widget buildTitle(DialogType dialogType) {
