@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
@@ -40,20 +42,19 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
     String googleUrl = widget.restaurant.location;
     String appleUrl = widget.restaurant.location;
 
-    print(googleUrl);
-    // try {
-    //   if (await UrlLauncher.canLaunch("comgooglemaps://")) {
-    //     print('launching com googleUrl');
-    //     await UrlLauncher.launch(googleUrl);
-    //   } else if (await UrlLauncher.canLaunch(appleUrl)) {
-    //     print('launching apple url');
-    //     await UrlLauncher.launch(appleUrl);
-    //   } else {
-    //     throw 'Could not launch url';
-    //   }
-    // } on Exception catch (e) {
-    //   print(e);
-    // }
+    try {
+      if (await UrlLauncher.canLaunch("comgooglemaps://")) {
+        print('launching com googleUrl');
+        await UrlLauncher.launch(googleUrl);
+      } else if (await UrlLauncher.canLaunch(appleUrl)) {
+        print('launching apple url');
+        await UrlLauncher.launch(appleUrl);
+      } else {
+        throw 'Could not launch url';
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   Widget buildTitle(DialogType dialogType) {
@@ -123,50 +124,52 @@ class _RestaurantSpeedDialState extends State<RestaurantSpeedDial>
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          height: 70.0,
-          alignment: FractionalOffset.centerRight,
-          child: FadeTransition(
-            // opacity: _fadeInFadeOut,
-            opacity: CurvedAnimation(
-              parent: _controller,
-              curve: Interval(
-                0.0,
-                1.0 - 0 / 2 / 2.0,
-                curve: Curves.easeOut,
+        if (Platform.isAndroid) ...[
+          Container(
+            height: 70.0,
+            alignment: FractionalOffset.centerRight,
+            child: FadeTransition(
+              // opacity: _fadeInFadeOut,
+              opacity: CurvedAnimation(
+                parent: _controller,
+                curve: Interval(
+                  0.0,
+                  1.0 - 0 / 2 / 2.0,
+                  curve: Curves.easeOut,
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    onPressed: null,
-                    disabledColor: Colors.white,
-                    disabledElevation: 2,
-                    child: Text(
-                      "Trouver",
-                      style: Theme.of(context).textTheme.bodyText2,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: null,
+                      disabledColor: Colors.white,
+                      disabledElevation: 2,
+                      child: Text(
+                        "Trouver",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
                   ),
-                ),
-                FloatingActionButton(
-                  heroTag: null,
-                  backgroundColor: AppColors.colorPrimary,
-                  mini: true,
-                  child: Icon(CustomIcons.map, color: Colors.white),
-                  onPressed: () => launchMaps(),
-                ),
-              ],
+                  FloatingActionButton(
+                    heroTag: null,
+                    backgroundColor: AppColors.colorPrimary,
+                    mini: true,
+                    child: Icon(CustomIcons.map, color: Colors.white),
+                    onPressed: () => launchMaps(),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
         Container(
           height: 70.0,
           alignment: FractionalOffset.centerRight,

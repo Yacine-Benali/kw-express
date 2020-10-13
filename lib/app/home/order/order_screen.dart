@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,10 +7,12 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'package:kwexpress/app/home/order/order_bloc.dart';
 import 'package:kwexpress/app/models/food.dart';
 import 'package:kwexpress/app/models/restaurant.dart';
+import 'package:kwexpress/common_widgets/platform_alert_dialog.dart';
 import 'package:kwexpress/common_widgets/progress_dialog.dart';
 import 'package:kwexpress/constants/app_colors.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderScreen extends StatefulWidget {
   final List<Food> cartFoodList;
@@ -141,10 +145,38 @@ class _OrderScreenState extends State<OrderScreen> {
     try {
       String message = await bloc.createMessage(sortedOrder, fullOrderPrice);
       List<String> recipents = [Constants.phoneNumer1, Constants.phoneNumber2];
+      String backupMessage;
+      if (Platform.isAndroid) {
+        backupMessage = 'sms:${Constants.phoneNumer1}?body=$message';
+      } else if (Platform.isIOS) {
+        // iOS
+        backupMessage =
+            bloc.convertOrder('sms:${Constants.phoneNumer1}&body=$message');
+      }
+      bool canSendSms = await canSendSMS();
+      bool canSendSms2 = await canLaunch(backupMessage);
+
       await pr.hide();
 
-      String _result = await sendSMS(message: message, recipients: recipents)
-          .catchError((onError) {});
+      if (canSendSms) {
+        String _result = await sendSMS(message: message, recipients: recipents)
+            .catchError((onError) {});
+        print('sms result from sendSMS: $_result');
+      } else if (canSendSms2) {
+        bool _result = await launch(backupMessage);
+        print('sms result from UrlLauncher: $_result');
+      } else {
+        print('no and no');
+        await PlatformAlertDialog(
+          title: 'Operation Failed',
+          content:
+              "can't send sms on this device please use another device or call these numbers to make your order: \n" +
+                  recipents[0] +
+                  "\n" +
+                  recipents[1],
+          defaultActionText: 'ok',
+        ).show(context);
+      }
     } on Exception catch (e) {
       await pr.hide();
       String text =

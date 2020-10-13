@@ -36,6 +36,7 @@ dependencies:
   location: ^3.0.2
   package_info: ^0.4.3
   retry: ^3.0.1
+  simple_sms: ^0.0.2
   #ui
   #progress_dialog: ^1.2.4
   flutter_svg: ^0.18.0
