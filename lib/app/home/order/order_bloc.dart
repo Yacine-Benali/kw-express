@@ -46,10 +46,8 @@ class OrderBloc {
 
   String convertOrder(String order) {
     String result;
-    print(order + '\n\n');
     result = order.replaceAll(RegExp(r' '), '%20');
     result = result.replaceAll(RegExp(r'\n'), '%20');
-    print(result);
     return result;
   }
 
