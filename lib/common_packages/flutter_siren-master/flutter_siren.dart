@@ -1,10 +1,12 @@
 library flutter_siren;
 
 import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'services/apple_app_store.dart';
 import 'services/google_play_store.dart';
 
@@ -51,6 +53,7 @@ class Siren {
       newVersion = await GooglePlayStore.getLatestVersion(from: packageName);
     }
     if (newVersion == null) return false;
+    print('currentVersion: $currentVersion ,newVersion:$newVersion');
     return currentVersion != newVersion;
   }
 
@@ -76,7 +79,7 @@ There is an updated version available on the App Store. Would you like to upgrad
       child: Text(buttonUpgradeText),
       onPressed: () {
         _openStoreUrl(context);
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       },
     ));
 
@@ -84,19 +87,24 @@ There is an updated version available on the App Store. Would you like to upgrad
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return FutureBuilder<bool>(
-            future: updateIsAvailable(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return AlertDialog(
-                  title: Text(title),
-                  content: Text(message),
-                  actions: buttons,
-                );
-              }
+        return WillPopScope(
+          onWillPop: () {
+            Navigator.of(context).pop();
+          },
+          child: FutureBuilder<bool>(
+              future: updateIsAvailable(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return AlertDialog(
+                    title: Text(title),
+                    content: Text(message),
+                    actions: buttons,
+                  );
+                }
 
-              return Container();
-            });
+                return Container();
+              }),
+        );
       },
     );
   }

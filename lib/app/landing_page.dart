@@ -62,7 +62,8 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
   }
 
-  void newFuture() {
+  void newFuture() async {
+    await Future.delayed(Duration(seconds: 2));
     print("snapshot has error retrying");
     if (Platform.isAndroid) {
       locationDataFuture = locationService.getUserPosition();

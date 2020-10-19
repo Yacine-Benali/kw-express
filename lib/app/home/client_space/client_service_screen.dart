@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kwexpress/app/home/client_space/client_space_bloc.dart';
 import 'package:kwexpress/common_widgets/custom_icons_icons.dart';
 import 'package:kwexpress/constants/app_colors.dart';
@@ -10,9 +9,9 @@ import 'package:kwexpress/constants/assets_path.dart';
 import 'package:kwexpress/constants/constants.dart';
 import 'package:kwexpress/constants/size_config.dart';
 import 'package:kwexpress/services/api_service.dart';
+import 'package:kwexpress/services/auth.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 import 'package:provider/provider.dart';
-import 'package:kwexpress/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClientServiceScreen extends StatefulWidget {
@@ -44,7 +43,8 @@ class _ClientServiceScreenState extends State<ClientServiceScreen> {
     if (Platform.isIOS)
       appLink = 'https://apps.apple.com/us/app/id1533417111';
     else
-      appLink = 'android app link';
+      appLink =
+          'https://play.google.com/store/apps/details?id=com.kwexpress.app';
 
     poweredBy = SvgPicture.asset(AssetsPath.poweredBy);
     phoneSvg = SvgPicture.asset(AssetsPath.phone);
