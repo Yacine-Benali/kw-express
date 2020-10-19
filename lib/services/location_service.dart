@@ -60,6 +60,6 @@ class LocationService {
     if (locationData == null)
       return 'position indisponible';
     else
-      return "https://www.google.com/maps/search/?api=1&query=${locationData.longitude},${locationData.latitude}";
+      return "https://www.google.com/maps/search/?api=1&query=${locationData.latitude},${locationData.longitude}";
   }
 }
