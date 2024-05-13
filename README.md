@@ -45,5 +45,5 @@ After installation, you can run the app on your device using your preferred IDE.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. 
 
