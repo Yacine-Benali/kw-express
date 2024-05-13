@@ -4,6 +4,8 @@ This repository contains the source code for the official K&W Express mobile app
 
 - The source code was owned by K&W Express Company and I have obtained permission to make the source code public
 
+![K&W Express App Screenshot](images/banner.jpeg)
+
 ## Features
 
 - **Cross-Platform Support**: Runs smoothly on both Android and iOS devices.
